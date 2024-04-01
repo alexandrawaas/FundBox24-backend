@@ -1,0 +1,31 @@
+openapi: 3.0.0
+info:
+  title: API documentation
+  version: 1.0.0
+tags:
+  - name: SearchAd
+paths:
+  /searchad/:
+    post:
+      requestBody:
+        $ref: '#/components/schemas/SearchAd'
+      responses:
+        '201':
+          description: Created
+
+components:
+  schemas:
+    SearchAd:
+      type: object
+      properties:
+        id:
+          type: integer
+          minimum: 0
+        title:
+          type: string
+          minLength: 1
+          maxLength: 300
+        user:
+          type: string
+          minLength: 1
+          maxLength: 100
