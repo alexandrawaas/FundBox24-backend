@@ -1,21 +1,190 @@
 openapi: 3.0.0
 info:
-  title: API documentation
+  title: API documentation of fundbox24's backend
   version: 1.0.0
 tags:
-  - name: SearchAd
+  - name: User management
+  - name: Report
+  - name: Chat
+
 paths:
-  /searchad/:
+  /users:
+    get:
+      tags:
+        - User management
+      summary: Get a list of all users
+      responses:
+        '200':
+          description: Successfully listed a user
     post:
+      tags:
+        - User management
+      summary: Create a new user
       requestBody:
-        $ref: '#/components/schemas/SearchAd'
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
       responses:
         '201':
-          description: Created
+          description: Successfully created a user
+
+  /users/{email}:
+    get:
+      tags:
+        - User management
+      summary: Get a user by Email
+      description: Returns a user by Email. You won't get the password.
+      parameters:
+        - name: email
+          in: path
+          required: true
+          description: Email of the user
+          schema:
+            type: string
+            minimum: 0
+      responses:
+        '200':
+          description: Successfully retrieved a user
+    put:
+      tags:
+        - User management
+      summary: Update a user by Email
+      parameters:
+        - name: email
+          in: path
+          required: true
+          description: Email of the user
+          schema:
+            type: string
+            minimum: 0
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '200':
+          description: Successfully updated a user
+    delete:
+      tags:
+        - User management
+      summary: Delete a user by Email
+      parameters:
+        - name: email
+          in: path
+          required: true
+          description: Email of the user
+          schema:
+            type: string
+            minimum: 0
+      responses:
+        '200':
+          description: Successfully deleted a user
+
+  /user/{email}/authenticate:
+    post:
+      tags:
+        - User management
+      summary: Authenticate a user
+      parameters:
+        - name: email
+          in: path
+          required: true
+          description: Email of the user
+          schema:
+            type: string
+            minimum: 0
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                password:
+                  type: string
+                  required: true
+      responses:
+        '200':
+          description: Successfully authenticated a user
+  /report:
+    get:
+      tags:
+        - Report
+      summary: Get a list of all reports
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Report'
+      responses:
+        '200':
+          description: Successfully listed a report
+
+  /report/found:
+    get:
+      tags:
+        - Report
+      summary: Get a list of all found reports
+      responses:
+        '200':
+          description: Successfully listed a report
+    post:
+      tags:
+        - Report
+      summary: Create a new found report
+      responses:
+        '201':
+          description: Successfully created a report
+
+  /report/lost:
+    get:
+      tags:
+        - Report
+      summary: Get a list of all lost reports
+      responses:
+        '200':
+          description: Successfully listed a report
+
 
 components:
   schemas:
-    SearchAd:
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          required: true
+          readOnly: true
+          uniqueItems: true
+          description: The user ID
+        email:
+          type: string
+          required: true
+          uniqueItems: true
+          description: The user's email
+        password:
+          type: string
+          required: true
+          description: The user's password
+        username:
+          type: string
+          required: true
+          description: The user's username
+        firstname:
+          type: string
+          required: true
+          description: The user's first name
+        lastname:
+          type: string
+          required: true
+          description: The user's last name
+
+    Report:
       type: object
       properties:
         id:
