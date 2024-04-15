@@ -13,6 +13,7 @@ paths:
       tags:
         - User management
       summary: Get a list of all users
+      description: Returns a list of all users. You won't get the passwords. This endpoint is only accessible to admin users.
       responses:
         '200':
           description: Successfully listed a user
@@ -89,6 +90,7 @@ paths:
       tags:
         - User management
       summary: Authenticate a user
+      description: Authenticate a user by email and password
       parameters:
         - name: email
           in: path
@@ -141,6 +143,58 @@ paths:
         '201':
           description: Successfully created a report
 
+  /report/found/{id}:
+    put:
+      tags:
+        - Report
+      summary: Update a found report
+      responses:
+        '200':
+          description: Successfully updated a report
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                object:
+                  type: string
+                description:
+                  type: string
+                status:
+                  type: string
+                place_of_discovery:
+                  type: string
+                datetime_of_discovery:
+                  type: string
+                place_of_delivery:
+                  type: string
+    delete:
+      tags:
+        - Report
+      summary: Delete a found report
+      responses:
+        '200':
+          description: Successfully deleted a report
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                object:
+                  type: string
+                description:
+                  type: string
+                status:
+                  type: string
+                place_of_discovery:
+                  type: string
+                datetime_of_discovery:
+                  type: string
+                place_of_delivery:
+                  type: string
+
   /report/lost:
     get:
       tags:
@@ -149,6 +203,62 @@ paths:
       responses:
         '200':
           description: Successfully listed a report
+
+  /chat:
+    get:
+      tags:
+        - Chat
+      summary: Get a list of all messages
+      responses:
+        '200':
+          description: Successfully listed a message
+    post:
+      tags:
+        - Chat
+      summary: Create a new message
+      responses:
+        '201':
+          description: Successfully created a message
+
+  /chat/{id}:
+    put:
+      tags:
+        - Chat
+      summary: Update a message
+      responses:
+        '200':
+          description: Successfully updated a message
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                type:
+                  type: string
+                content:
+                  type: string
+                createdAt:
+                  type: string
+    delete:
+      tags:
+        - Chat
+      summary: Delete a message
+      responses:
+        '200':
+          description: Successfully deleted a message
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                type:
+                  type: string
+                content:
+                  type: string
+                createdAt:
+                  type: string
 
 
 components:
@@ -198,3 +308,20 @@ components:
           type: string
           minLength: 1
           maxLength: 100
+
+    Message:
+      type: object
+      properties:
+        id:
+          type: integer
+          minimum: 0
+        type:
+          type: string
+          minLength: 1
+          maxLength: 300
+        content:
+          type: string
+          minLength: 1
+          maxLength: 100
+        createdAt:
+          type: string
