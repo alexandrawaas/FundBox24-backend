@@ -85,20 +85,12 @@ paths:
         '200':
           description: Successfully deleted a user
 
-  /user/{email}/authenticate:
+  /user-authenticate:
     post:
       tags:
         - User management
       summary: Authenticate a user
       description: Authenticate a user by email and password
-      parameters:
-        - name: email
-          in: path
-          required: true
-          description: Email of the user
-          schema:
-            type: string
-            minimum: 0
       requestBody:
         required: true
         content:
@@ -106,6 +98,9 @@ paths:
             schema:
               type: object
               properties:
+                email:
+                  type: string
+                  required: true
                 password:
                   type: string
                   required: true
