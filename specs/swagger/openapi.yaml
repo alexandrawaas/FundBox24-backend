@@ -208,26 +208,37 @@ paths:
     get:
       tags:
         - Chat
-      summary: Get a list of all messages
+      summary: Get a list of all the chats
       responses:
         '200':
-          description: Successfully listed a message
+          description: Successfully listed chats
     post:
       tags:
         - Chat
-      summary: Create a new message
+      summary: Create a new chat
+      description: Create a new chat with a message
       responses:
         '201':
           description: Successfully created a message
 
   /chat/{id}:
+    get:
+      tags:
+        - Chat
+      summary: Get a chat by id
+      description: Get some details of a chat including all messages of the chat
+      responses:
+        '200':
+          description: Successfully retrieved a chat
+
     put:
       tags:
         - Chat
-      summary: Update a message
+      summary: Update a chat
+      description: Update the properties of a chat by id
       responses:
         '200':
-          description: Successfully updated a message
+          description: Successfully updated a chat
       requestBody:
         required: true
         content:
@@ -243,10 +254,11 @@ paths:
     delete:
       tags:
         - Chat
-      summary: Delete a message
+      summary: Delete a chat
+      description: Delete a chat and all its messages
       responses:
         '200':
-          description: Successfully deleted a message
+          description: Successfully deleted a chat
       requestBody:
         required: true
         content:
@@ -259,6 +271,22 @@ paths:
                   type: string
                 createdAt:
                   type: string
+
+  /chat/{id}/message:
+    get:
+      tags:
+        - Chat
+      summary: Get a list of all messages of a chat
+      responses:
+        '200':
+          description: Successfully listed messages
+    post:
+      tags:
+        - Chat
+      summary: Create a new message
+      responses:
+        '201':
+          description: Successfully created a message
 
 
 components:
