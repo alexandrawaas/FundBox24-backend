@@ -1,1 +1,17 @@
-version: "3"
+version: "3.8"
+
+volumes:
+  storage:
+
+services:
+  db:
+    image: mysql
+    volumes:
+        - storage:/var/lib/mysql
+    ports:
+      - 3307:3306
+    environment:
+        MYSQL_ROOT_PASSWORD: root
+        MYSQL_DATABASE: fundbox24
+        MYSQL_USER: api
+        MYSQL_PASSWORD: test
