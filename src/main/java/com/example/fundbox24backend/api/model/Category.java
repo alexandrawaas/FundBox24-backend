@@ -10,15 +10,17 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-public class User {
+public class Category {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     private String name;
-    private String email;
-    private String password;
-    private String role;
+    private ValueType value;
+    private String imagePath;
 
+    public Boolean requiresAction() {
+        return value == ValueType.HIGH;
+    }
 }
