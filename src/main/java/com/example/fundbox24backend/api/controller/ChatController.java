@@ -2,6 +2,8 @@ package com.example.fundbox24backend.api.controller;
 
 import com.example.fundbox24backend.api.controller.exceptions.ChatNotFoundException;
 import com.example.fundbox24backend.api.model.Chat;
+import com.example.fundbox24backend.api.model.FoundReport;
+import com.example.fundbox24backend.api.model.Message;
 import com.example.fundbox24backend.api.repository.ChatRepository;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,10 +32,9 @@ class ChatController {
 
     @PostMapping("/chat")
     Chat newChat(@RequestBody Chat newChat) {
+
         return repository.save(newChat);
     }
-
-    // Single item
 
     @GetMapping("/chat/{id}")
     Chat one(@PathVariable Long id) {

@@ -2,8 +2,7 @@ package com.example.fundbox24backend.api.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
-
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Entity
 @Data
@@ -13,6 +12,17 @@ public abstract class Message
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    private Date sentAt;
+    private LocalDateTime sentAt;
     @ManyToOne private User sender;
+
+    public Message(LocalDateTime sentAt, User sender)
+    {
+        this.sentAt = sentAt;
+        this.sender = sender;
+    }
+
+    public Message()
+    {
+
+    }
 }

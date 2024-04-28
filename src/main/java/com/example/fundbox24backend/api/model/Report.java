@@ -2,8 +2,8 @@ package com.example.fundbox24backend.api.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
-
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -18,12 +18,12 @@ public abstract class Report {
     private String title;
     private String description;
     private String imagePath;
-    private Date createdAt;
+    private LocalDateTime createdAt;
     private boolean isFinished;
     @ManyToOne private Category category;
-    @OneToMany private List<Chat> chats;
+    @OneToMany(fetch = FetchType.EAGER) private List<Chat> chats = new ArrayList<Chat>();
 
-    public Report(String title, String description, String imagePath, Date createdAt, boolean isFinished, Category category, List<Chat> chats)
+    public Report(String title, String description, String imagePath, LocalDateTime createdAt, boolean isFinished, Category category)
     {
         this.title = title;
         this.description = description;
@@ -31,11 +31,15 @@ public abstract class Report {
         this.createdAt = createdAt;
         this.isFinished = isFinished;
         this.category = category;
-        this.chats = chats;
     }
 
     public Report()
     {
 
+    }
+
+    public void addChat(Chat chat)
+    {
+        this.chats.add(chat);
     }
 }
