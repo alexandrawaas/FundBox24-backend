@@ -13,14 +13,25 @@ import lombok.Setter;
 public class Category {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
     private String name;
     private ValueType value;
     private String imagePath;
 
+    public Category()
+    {
+
+    }
+
     public Boolean requiresAction() {
         return value == ValueType.HIGH;
+    }
+
+    public Category(String name, ValueType value, String imagePath) {
+        this.name = name;
+        this.value = value;
+        this.imagePath = imagePath;
     }
 }

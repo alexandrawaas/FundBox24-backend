@@ -10,7 +10,9 @@ import lombok.*;
 @Data
 public class Location
 {
-    @Id @GeneratedValue(strategy = GenerationType.AUTO) private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    private Long id;
     private double latitude;
     private double longitude;
 
