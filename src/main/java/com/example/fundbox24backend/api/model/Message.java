@@ -12,6 +12,7 @@ public abstract class Message
 {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
     private Date sentAt;
     @ManyToOne private User sender;
 }

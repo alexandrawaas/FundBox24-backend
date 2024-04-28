@@ -1,9 +1,7 @@
 package com.example.fundbox24backend.api.model;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
 import lombok.Data;
-import lombok.Getter;
 
 import java.util.Date;
 import java.util.List;
@@ -15,6 +13,8 @@ public abstract class Report {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+
     private String title;
     private String description;
     private String imagePath;
@@ -23,4 +23,19 @@ public abstract class Report {
     @ManyToOne private Category category;
     @OneToMany private List<Chat> chats;
 
+    public Report(String title, String description, String imagePath, Date createdAt, boolean isFinished, Category category, List<Chat> chats)
+    {
+        this.title = title;
+        this.description = description;
+        this.imagePath = imagePath;
+        this.createdAt = createdAt;
+        this.isFinished = isFinished;
+        this.category = category;
+        this.chats = chats;
+    }
+
+    public Report()
+    {
+
+    }
 }

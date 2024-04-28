@@ -13,11 +13,7 @@ public class UserController {
 
     @PostMapping("/user")
     public @ResponseBody User createUser(@RequestParam String name, @RequestParam String email, @RequestParam String password, @RequestParam String role) {
-        User user = new User();
-        user.setName(name);
-        user.setEmail(email);
-        user.setPassword(password); // TODO: Encrypt password
-        user.setRole(role);
+        User user = new User(name, email, password, role);
         userRepository.save(user);
         return user;
     }

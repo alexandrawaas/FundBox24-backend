@@ -6,11 +6,9 @@ import lombok.*;
 import java.util.Date;
 
 @Data
-@EqualsAndHashCode(callSuper = true)
 @Entity
 public class LostReport extends Report
 {
-    private Long id;
     private Date lastSeenDate;
     @OneToOne private Location lastSeenLocation;
     @OneToOne private Location lostLocation;

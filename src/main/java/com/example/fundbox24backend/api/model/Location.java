@@ -13,4 +13,15 @@ public class Location
     @Id @GeneratedValue(strategy = GenerationType.AUTO) private Long id;
     private double latitude;
     private double longitude;
+
+    public Location(double latitude, double longitude)
+    {
+        this.latitude = latitude;
+        this.longitude = longitude;
+    }
+
+    public Location()
+    {
+
+    }
 }
