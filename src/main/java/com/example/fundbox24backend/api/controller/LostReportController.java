@@ -60,7 +60,7 @@ class LostReportController {
     }
 
     @DeleteMapping("/report/lost/{id}")
-    void deleteEmployee(@PathVariable Long id) {
+    void deleteLostReport(@PathVariable Long id) {
         repository.deleteById(id);
     }
 }

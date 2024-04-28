@@ -23,26 +23,26 @@ class ChatController {
     }
 
 
-    @GetMapping("/report/found")
+    @GetMapping("/chat")
     List<Chat> all() {
         return repository.findAll();
     }
 
-    @PostMapping("/report/found")
+    @PostMapping("/chat")
     Chat newChat(@RequestBody Chat newChat) {
         return repository.save(newChat);
     }
 
     // Single item
 
-    @GetMapping("/report/found/{id}")
+    @GetMapping("/chat/{id}")
     Chat one(@PathVariable Long id) {
 
         return repository.findById(id)
                 .orElseThrow(ChatNotFoundException::new);
     }
 
-    @PutMapping("/report/found/{id}")
+    @PutMapping("/chat/{id}")
     Chat replaceChat(@RequestBody Chat newChat, @PathVariable Long id) {
 
         return repository.findById(id)
@@ -56,8 +56,8 @@ class ChatController {
                 });
     }
 
-    @DeleteMapping("/report/found/{id}")
-    void deleteEmployee(@PathVariable Long id) {
+    @DeleteMapping("/chat/{id}")
+    void deleteChat(@PathVariable Long id) {
         repository.deleteById(id);
     }
 }
