@@ -11,20 +11,35 @@ public class UserController {
     @Autowired
     private UserRepository userRepository;
 
-    @PostMapping("/user")
-    public @ResponseBody User createUser(@RequestParam String name, @RequestParam String email, @RequestParam String password, @RequestParam String role) {
-        User user = new User();
-        user.setName(name);
-        user.setEmail(email);
-        user.setPassword(password); // TODO: Encrypt password
-        user.setRole(role);
-        userRepository.save(user);
-        return user;
+    @GetMapping("/user")
+    public User getUser() {
+        //TODO: Implement with token
+        return userRepository.findAll().iterator().next();
     }
 
-    @GetMapping("/user")
-    public @ResponseBody Iterable<User> getUser() {
-        return userRepository.findAll();
+    @PutMapping("/user")
+    public @ResponseBody User updateUser(@RequestBody String name, @RequestBody String email, @RequestBody String password, @RequestBody String role) {
+        //TODO: Implement with token
+        return userRepository.findAll().iterator().next();
+    }
+
+    @PostMapping("/login")
+    public @ResponseBody User login(@RequestBody String email, @RequestBody String password) {
+        // TODO: Implement with token
+        return null;
+    }
+
+    @PostMapping("/logut")
+    public @ResponseBody User logout() {
+        //TODO: Implement with token
+        return null;
+    }
+
+    @PostMapping("/register")
+    public @ResponseBody User createUser(@RequestBody String name, @RequestBody String email, @RequestBody String password, @RequestBody String role) {
+        User user = new User(name, email, password, role);
+        userRepository.save(user);
+        return user;
     }
 
 }
