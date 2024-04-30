@@ -24,19 +24,19 @@ class FoundReportController {
 
 
     @GetMapping("/report/found")
-    List<FoundReport> all() {
+    List<FoundReport> getAllFoundReports() {
         return repository.findAll();
     }
 
     @PostMapping("/report/found")
-    FoundReport newFoundReport(@RequestBody FoundReport newFoundReport) {
+    FoundReport createFoundReport(@RequestBody FoundReport newFoundReport) {
         return repository.save(newFoundReport);
     }
 
     // Single item
 
     @GetMapping("/report/found/{id}")
-    FoundReport one(@PathVariable Long id) {
+    FoundReport getFoundReport(@PathVariable Long id) {
 
         return repository.findById(id)
                 .orElseThrow(ReportNotFoundException::new);

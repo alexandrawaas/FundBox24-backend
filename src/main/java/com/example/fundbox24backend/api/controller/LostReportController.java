@@ -18,19 +18,19 @@ class LostReportController {
 
 
     @GetMapping("/report/lost")
-    List<LostReport> all() {
+    List<LostReport> getAllLostReports() {
         return repository.findAll();
     }
 
     @PostMapping("/report/lost")
-    LostReport newLostReport(@RequestBody LostReport newLostReport) {
+    LostReport createLostReport(@RequestBody LostReport newLostReport) {
         return repository.save(newLostReport);
     }
 
     // Single item
 
     @GetMapping("/report/lost/{id}")
-    LostReport one(@PathVariable Long id) {
+    LostReport getLostReport(@PathVariable Long id) {
 
         return repository.findById(id)
                 .orElseThrow(ReportNotFoundException::new);
