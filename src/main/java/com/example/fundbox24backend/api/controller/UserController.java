@@ -36,8 +36,8 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public @ResponseBody User createUser(@RequestBody String name, @RequestBody String email, @RequestBody String password, @RequestBody String role) {
-        User user = new User(name, email, password, role);
+    public @ResponseBody User createUser(@RequestBody String name, @RequestBody String email, @RequestBody String password) {
+        User user = new User(name, email, password);
         userRepository.save(user);
         return user;
     }

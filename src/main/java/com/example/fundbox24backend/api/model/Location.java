@@ -4,6 +4,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 @Entity
@@ -13,7 +14,9 @@ public class Location
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
+    @NotNull
     private double latitude;
+    @NotNull
     private double longitude;
 
     public Location(double latitude, double longitude)

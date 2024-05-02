@@ -16,9 +16,9 @@ public class FoundReport extends Report
     @OneToOne private Location currentLocation;
     @ManyToOne private User finder;
 
-    public FoundReport(String title, String description, String imagePath, LocalDateTime createdAt, boolean isFinished, Category category, List<Chat> chats, LocalDateTime foundDate, Location foundLocation, Location currentLocation, User finder)
+    public FoundReport(String title, String description, String imagePath, boolean isFinished, Category category, LocalDateTime foundDate, Location foundLocation, Location currentLocation, User finder)
     {
-        super(title, description, imagePath, createdAt, isFinished, category);
+        super(title, description, imagePath, isFinished, category);
         this.foundDate = foundDate;
         this.foundLocation = foundLocation;
         this.currentLocation = currentLocation;

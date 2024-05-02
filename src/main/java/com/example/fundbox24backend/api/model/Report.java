@@ -1,6 +1,8 @@
 package com.example.fundbox24backend.api.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -15,20 +17,22 @@ public abstract class Report {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @NotNull
+    @NotBlank(message = "Title of report cannot be empty")
     private String title;
     private String description;
-    private String imagePath;
-    private LocalDateTime createdAt;
-    private boolean isFinished;
+    private String imagePath;   // TODO: implement default image per category
+    private LocalDateTime createdAt = LocalDateTime.now();
+    private boolean isFinished = false;
+    @NotNull
     @ManyToOne private Category category;
     @OneToMany(fetch = FetchType.EAGER) private List<Chat> chats = new ArrayList<Chat>();
 
-    public Report(String title, String description, String imagePath, LocalDateTime createdAt, boolean isFinished, Category category)
+    public Report(String title, String description, String imagePath, boolean isFinished, Category category)
     {
         this.title = title;
         this.description = description;
         this.imagePath = imagePath;
-        this.createdAt = createdAt;
         this.isFinished = isFinished;
         this.category = category;
     }
