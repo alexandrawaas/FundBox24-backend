@@ -1,0 +1,20 @@
+services:
+  fundbox24-backend:
+    container_name: fundbox24-spring
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    ports:
+      - '8080:8080'
+    depends_on:
+      - database
+  database:
+    container_name: fundbox24-db
+    image: mysql
+    ports:
+      - 3307:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: fundbox24
+      MYSQL_USER: api
+      MYSQL_PASSWORD: test
