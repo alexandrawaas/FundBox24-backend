@@ -59,10 +59,7 @@ class FoundReportController {
                     report.setCurrentLocation(newFoundReport.getCurrentLocation());
                     return repository.save(report);
                 })
-                .orElseGet(() -> {
-                    newFoundReport.setId(id);
-                    return repository.save(newFoundReport);
-                });
+                .orElseThrow(ReportNotFoundException::new);
     }
 
     @DeleteMapping("/report/found/{id}")

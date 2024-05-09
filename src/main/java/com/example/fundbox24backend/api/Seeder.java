@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @Configuration
 class Seeder {
 
-    private boolean enableSeeder = true;
+    private boolean enableSeeder = false;
     // TODO: Drop Database if enableSeeder is true
 
     private static final Logger log = LoggerFactory.getLogger(Seeder.class);
@@ -35,23 +35,19 @@ class Seeder {
                 log.info("Preloading " + categoryRepository.save(new Category("Other", ValueType.LOW)));
 
                 // Seed users
-                log.info("Preloading " + userRepository.save(new User("BlauerWal123", "max.muster@test.de", "123456")));
+                userRepository.save(new User("BlauerWal123", "max.muster@test.de", "123456"));
                 log.info("Preloading " + userRepository.save(new User("RoterFuchs567", "anna.beispiel@test.de", "123456")));
 
                 // Seed found reports
                 User max = userRepository.findById(1L).orElse(null);
-                Location location = new Location(53.551086, 9.993682);
-                log.info("Preloading " + locationRepository.save(location));
-                Location location2 = new Location(53.554686, 9.003682);
-                log.info("Preloading " + locationRepository.save(location2));
-                log.info("Preloading " + foundReportRepository.save(new FoundReport("Pink handbag with water bottle", "bla", "/images/handbag.jpg", false, categoryRepository.findById(3L).orElse(null), LocalDateTime.of(2024, 4, 26, 15, 52), location, location2, max)));
+                //log.info("Preloading " + foundReportRepository.save(new FoundReport("Pink handbag with water bottle", "bla", "/images/handbag.jpg", false, categoryRepository.findById(3L).orElse(null), LocalDateTime.of(2024, 4, 26, 15, 52), new Location(53.551086, 9.993682), new Location(53.554686, 9.003682), max)));
+
+                foundReportRepository.save(new FoundReport("Black wallet with 120€", "bla", "/images/wallet.jpg", false, categoryRepository.findById(1L).orElse(null), LocalDateTime.of(2024, 4, 24, 7, 0), new Location(53.554686, 9.002382), new Location(51.5542386, 9.403682), max));
 
                 // Seed lost reports
                 User anna = userRepository.findById(2L).orElse(null);
                 Location location3 = new Location(53.5588086, 9.993582);
-                log.info("Preloading " + locationRepository.save(location3));
                 Location location4 = new Location(53.554386, 9.003672);
-                log.info("Preloading " + locationRepository.save(location4));
                 log.info("Preloading " + lostReportRepository.save(new LostReport(  "Wallet with blue roses print", "bla", "/images/wallet.jpg", false, categoryRepository.findById(1L).orElse(null), LocalDateTime.of(2024, 4, 24, 7, 0), location3, location4, 4.0, anna)));
 
                 // Seed chats

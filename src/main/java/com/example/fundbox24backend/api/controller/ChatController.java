@@ -5,13 +5,7 @@ import com.example.fundbox24backend.api.model.Chat;
 import com.example.fundbox24backend.api.model.FoundReport;
 import com.example.fundbox24backend.api.model.Message;
 import com.example.fundbox24backend.api.repository.ChatRepository;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -49,15 +43,7 @@ class ChatController {
         repository.deleteById(id);
     }
 
-    @GetMapping("/chat/{id}/messages")
-    List<Message> getMessages(@PathVariable Long id)
-    {
-        return repository.findById(id)
-                .orElseThrow(ChatNotFoundException::new)
-                .getMessages();
-    }
-
-    @PostMapping("/chat/{id}/messages")
+    @PatchMapping("/chat/{id}")
     Chat addMessage(@RequestBody Message newMessage, @PathVariable Long id)
     {
         return repository.findById(id)

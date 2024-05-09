@@ -53,10 +53,7 @@ class LostReportController {
                     report.setLostRadius(newLostReport.getLostRadius());
                     return repository.save(report);
                 })
-                .orElseGet(() -> {
-                    newLostReport.setId(id);
-                    return repository.save(newLostReport);
-                });
+                .orElseThrow(ReportNotFoundException::new);
     }
 
     @DeleteMapping("/report/lost/{id}")
