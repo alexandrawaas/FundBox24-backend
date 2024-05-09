@@ -13,5 +13,10 @@ public class ChatDtoResponse
     @JsonProperty("reportId") private Long reportId;
     @JsonProperty("messages") private List<MessageDtoResponse> messages;
     @JsonProperty("reportVisitor") private ChatPartnerDtoResponse reportVisitor;
-    @JsonProperty("reportOwner") private ChatPartnerDtoResponse reportCreator;
+    @JsonProperty("reportCreator") private ChatPartnerDtoResponse reportCreator;
+
+    public ChatDtoResponse(Long id, Long reportId, List<MessageDtoResponse> messages, ChatPartnerDtoResponse reportVisitor, ChatPartnerDtoResponse reportCreator)
+    {
+
+    }
 }

@@ -48,7 +48,7 @@ class Seeder {
                 User anna = userRepository.findById(2L).orElse(null);
                 Location location3 = new Location(53.5588086, 9.993582);
                 Location location4 = new Location(53.554386, 9.003672);
-                log.info("Preloading " + lostReportRepository.save(new LostReport(  "Wallet with blue roses print", "bla", "/images/wallet.jpg", false, categoryRepository.findById(1L).orElse(null), LocalDateTime.of(2024, 4, 24, 7, 0), location3, location4, 4.0, anna)));
+                log.info("Preloading " + lostReportRepository.save(new LostReport(  "Wallet with blue roses print", "bla", "/images/wallet.jpg", false, categoryRepository.findById(1L).orElse(null), LocalDateTime.of(2024, 4, 24, 7, 0), location3, location4, 4, anna)));
 
                 // Seed chats
                 Chat chat = new Chat();

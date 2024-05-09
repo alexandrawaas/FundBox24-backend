@@ -26,4 +26,10 @@ public class ImageMessage extends Message
     {
 
     }
+
+    @Override
+    public String getContent()
+    {
+        return this.imagePath;
+    }
 }

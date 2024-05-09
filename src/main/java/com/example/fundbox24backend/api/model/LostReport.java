@@ -20,11 +20,11 @@ public class LostReport extends Report
     @NotNull
     @OneToOne private Location lastSeenLocation;
     @OneToOne private Location lostLocation = lastSeenLocation;
-    private double lostRadius;
+    private int lostRadius;
     @NotNull
     @ManyToOne private User owner;
 
-    public LostReport(String title, String description, String imagePath, boolean isFinished, Category category, LocalDateTime lastSeenDate, Location lastSeenLocation, Location lostLocation, double lostRadius, User owner)
+    public LostReport(String title, String description, String imagePath, boolean isFinished, Category category, LocalDateTime lastSeenDate, Location lastSeenLocation, Location lostLocation, int lostRadius, User owner)
     {
         super(title, description, imagePath, isFinished, category);
         this.lastSeenDate = lastSeenDate;
@@ -37,5 +37,11 @@ public class LostReport extends Report
     public LostReport()
     {
 
+    }
+
+    @Override
+    public User getCreator()
+    {
+        return this.owner;
     }
 }
