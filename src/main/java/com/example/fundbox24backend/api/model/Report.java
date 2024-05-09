@@ -46,4 +46,6 @@ public abstract class Report {
     {
         this.chats.add(chat);
     }
+
+    public abstract User getCreator();
 }

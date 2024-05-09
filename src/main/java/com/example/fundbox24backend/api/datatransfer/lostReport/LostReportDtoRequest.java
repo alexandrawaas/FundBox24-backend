@@ -1,7 +1,5 @@
-package com.example.fundbox24backend.api.datatransfer.report;
+package com.example.fundbox24backend.api.datatransfer.lostReport;
 
-import com.example.fundbox24backend.api.datatransfer.chat.ChatPartnerDtoResponse;
-import com.example.fundbox24backend.api.model.Category;
 import com.example.fundbox24backend.api.model.Location;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;

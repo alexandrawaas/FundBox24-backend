@@ -29,4 +29,10 @@ public class TextMessage extends Message
     public TextMessage()
     {
     }
+
+    @Override
+    public String getContent()
+    {
+        return this.text;
+    }
 }

@@ -1,4 +1,4 @@
-package com.example.fundbox24backend.api.datatransfer.report;
+package com.example.fundbox24backend.api.datatransfer.foundReport;
 
 import com.example.fundbox24backend.api.model.Location;
 import com.fasterxml.jackson.annotation.JsonProperty;
