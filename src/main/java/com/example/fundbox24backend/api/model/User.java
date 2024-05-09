@@ -1,9 +1,7 @@
 package com.example.fundbox24backend.api.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.annotation.Nullable;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -26,11 +24,22 @@ public class User {
     @NotBlank(message = "Password cannot be empty")     // TODO: Password validation
     private String password;
 
+    @OneToOne @Nullable
+    private Location homeLocation = null;
+
+    private double homeRadius = 1.0;
+
+    private boolean useCurrentLocation = true;
+
+    private boolean receiveNotifications = true;
+
+
     public User(String name, String email, String password)
     {
         this.name = name;
         this.email = email;
         this.password = password;
+
     }
 
     public User()

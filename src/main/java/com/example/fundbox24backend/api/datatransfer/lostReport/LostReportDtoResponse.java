@@ -22,10 +22,10 @@ public class LostReportDtoResponse
     @JsonProperty("lastSeenDate") private LocalDateTime lastSeenDate;
     @JsonProperty("lastSeenLocation") private Location lastSeenLocation;
     @JsonProperty("lostLocation") private Location lostLocation;
-    @JsonProperty("lostRadius") private int lostRadius;
+    @JsonProperty("lostRadius") private double lostRadius;
     @JsonProperty("myChats") private List<ChatDtoResponse> myChats;
 
-    public LostReportDtoResponse(Long id, String title, String description, String imagePath, LocalDateTime createdAt, boolean finished, Category category, LocalDateTime lastSeenDate, Location lastSeenLocation, Location lostLocation, int lostRadius, List<ChatDtoResponse> myChats)
+    public LostReportDtoResponse(Long id, String title, String description, String imagePath, LocalDateTime createdAt, boolean finished, Category category, LocalDateTime lastSeenDate, Location lastSeenLocation, Location lostLocation, double lostRadius, List<ChatDtoResponse> myChats)
     {
         this.id = id;
         this.title = title;

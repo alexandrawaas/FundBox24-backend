@@ -16,5 +16,5 @@ public class LostReportDtoRequest
     @JsonProperty("lastSeenDate") private LocalDateTime lastSeenDate;
     @JsonProperty("lastSeenLocation") private Location lastSeenLocation;
     @JsonProperty("lostLocation") private Location lostLocation;
-    @JsonProperty("lostRadius") private int lostRadius;
+    @JsonProperty("lostRadius") private double lostRadius;
 }
