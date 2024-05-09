@@ -21,8 +21,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/AuthDtoRequest
-        '
+              $ref: '#/components/schemas/AuthDtoRequest'
       responses:
         '201':
           description: Successfully created a user
@@ -37,8 +36,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/AuthDtoRequest
-        '
+              $ref: '#/components/schemas/AuthDtoRequest'
       responses:
         '200':
           description: Successfully authenticated user
@@ -506,26 +504,16 @@ paths:
         '401':
           description: Unauthorized
 
-
-
-
-
 components:
   schemas:
     AuthDtoRequest:
         type: object
-        required:
-            - email
-            - password
         properties:
           email:
             type: string
-            required: true
-            uniqueItems: true
             description: The user's email
           password:
             type: string
-            required: true
             description: The user's password
 
     UserDtoRequest:
@@ -542,7 +530,6 @@ components:
         receiveNotifications:
           type: boolean
 
-
     UserDtoResponse:
       type: object
       properties:
@@ -551,12 +538,10 @@ components:
           minimum: 1
         email:
           type: string
-          required: true
           uniqueItems: true
           description: The user's email
         username:
           type: string
-          required: true
           description: The user's username
         homeLocation:
           $ref: '#/components/schemas/Location'
@@ -575,7 +560,7 @@ components:
         - title
         - description
         - imagePath
-        - category
+        - categoryId
         - lastSeenDate
         - lastSeenLocation
         - lostRadius
@@ -591,8 +576,9 @@ components:
         imagePath:
           type: string
           format: uri
-        category:
-          $ref: '#/components/schemas/Category'
+        categoryId:
+            type: number
+            minimum: 1
         lastSeenDate:
             type: string
             format: date-time
@@ -640,6 +626,10 @@ components:
           type: integer
           minimum: 1
           maximum: 100
+        myChats:
+          type: array
+          items:
+            $ref: '#/components/schemas/ChatDtoResponse'
 
     FoundReportDtoRequest:
       type: object
@@ -647,7 +637,7 @@ components:
         - title
         - description
         - imagePath
-        - category
+        - categoryId
         - foundDate
         - foundLocation
       properties:
@@ -662,8 +652,9 @@ components:
         imagePath:
           type: string
           format: uri
-        category:
-          $ref: '#/components/schemas/Category'
+        categoryId:
+            type: number
+            minimum: 1
         foundDate:
           type: string
           format: date-time
@@ -703,6 +694,10 @@ components:
           $ref: '#/components/schemas/Location'
         currentLocation:
           $ref: '#/components/schemas/Location'
+        myChats:
+          type: array
+          items:
+            $ref: '#/components/schemas/ChatDtoResponse'
 
     ChatDtoRequest:
       type: object
@@ -767,7 +762,6 @@ components:
           id:
             type: number
             minimum: 1
-
           username:
             type: string
             minLength: 1
