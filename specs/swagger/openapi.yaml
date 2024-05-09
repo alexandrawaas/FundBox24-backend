@@ -3,198 +3,811 @@ info:
   title: API documentation of fundbox24's backend
   version: 1.0.0
 tags:
-  - name: User management
   - name: Report
+  - name: Category
   - name: Chat
+  - name: User
+  - name: Authentication
 
 paths:
-  /users:
-    get:
-      tags:
-        - User management
-      summary: Get a list of all users
-      responses:
-        '200':
-          description: Successfully listed a user
+
+  /register:
     post:
       tags:
-        - User management
+        - Authentication
       summary: Create a new user
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/User'
+              $ref: '#/components/schemas/AuthDtoRequest
+        '
       responses:
         '201':
           description: Successfully created a user
 
-  /users/{email}:
+  /login:
+    post:
+      tags:
+        - Authentication
+      summary: Authenticate a user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuthDtoRequest
+        '
+      responses:
+        '200':
+          description: Successfully authenticated user
+
+  /logout:
+    post:
+      tags:
+        - Authentication
+      summary: Log out a user
+      responses:
+        '200':
+          description: Successfully logged out user
+
+  /users:
     get:
       tags:
-        - User management
-      summary: Get a user by Email
-      description: Returns a user by Email. You won't get the password.
-      parameters:
-        - name: email
-          in: path
-          required: true
-          description: Email of the user
-          schema:
-            type: string
-            minimum: 0
+        - User
+      summary: Get a user
+      description: Returns a user by Token. You won't get the password.
       responses:
         '200':
           description: Successfully retrieved a user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserDtoResponse'
+        '401':
+          description: Unauthorized
+
     put:
       tags:
-        - User management
-      summary: Update a user by Email
-      parameters:
-        - name: email
-          in: path
-          required: true
-          description: Email of the user
-          schema:
-            type: string
-            minimum: 0
+        - User
+      summary: Update a user
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/User'
+              $ref: '#/components/schemas/UserDtoResponse'
       responses:
         '200':
           description: Successfully updated a user
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/UserDtoResponse'
     delete:
       tags:
-        - User management
+        - User
       summary: Delete a user by Email
-      parameters:
-        - name: email
-          in: path
-          required: true
-          description: Email of the user
-          schema:
-            type: string
-            minimum: 0
       responses:
-        '200':
+        '204':
           description: Successfully deleted a user
 
-  /user/{email}/authenticate:
-    post:
-      tags:
-        - User management
-      summary: Authenticate a user
-      parameters:
-        - name: email
-          in: path
-          required: true
-          description: Email of the user
-          schema:
-            type: string
-            minimum: 0
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                password:
-                  type: string
-                  required: true
-      responses:
-        '200':
-          description: Successfully authenticated a user
-  /report:
+  /users/reports/found:
     get:
       tags:
-        - Report
-      summary: Get a list of all reports
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Report'
+        - User
+      summary: Get a list of all found reports of a user
       responses:
         '200':
-          description: Successfully listed a report
+          description: Successful
+        '204':
+          description: No reports found
+        '401':
+          description: Unauthorized
 
-  /report/found:
+  /users/reports/lost:
+    get:
+      tags:
+        - User
+      summary: Get a list of all lost reports of a user
+      responses:
+        '200':
+          description: Successful
+        '204':
+          description: No reports found
+        '401':
+          description: Unauthorized
+
+  /reports/found:
     get:
       tags:
         - Report
       summary: Get a list of all found reports
+      parameters:
+        - name: category
+          in: query
+          required: false
+          description: Category of the report
+          schema:
+            $ref: '#/components/schemas/Category'
+        - name: latitude
+          in: query
+          required: false
+          description: Location to search for found reports. Default is the user's home or current location
+          schema:
+            type: number
+            minimum: -90
+            maximum: 90
+        - name: longitude
+          in: query
+          required: false
+          description: Location to search for found reports. Default is the user's home or current location
+          schema:
+            type: number
+            minimum: -180
+            maximum: 180
+        - name: radius
+          in: query
+          required: false
+          description: Radius of the location filter
+          schema:
+            type: number
+            minimum: 1
+            maximum: 100
       responses:
         '200':
-          description: Successfully listed a report
+          description: Successful
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/FoundReportDtoResponse'
+        '204':
+          description: No reports found
+        '401':
+          description: Unauthorized
     post:
       tags:
         - Report
       summary: Create a new found report
+      requestBody:
+          required: true
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FoundReportDtoRequest'
       responses:
         '201':
           description: Successfully created a report
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FoundReportDtoResponse'
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
 
-  /report/lost:
+  /reports/found/{reportId}:
+    get:
+      tags:
+        - Report
+      summary: Get a found report by Id
+      parameters:
+        - name: reportId
+          in: path
+          required: true
+          description: Id of the report
+          schema:
+            type: number
+            minimum: 1
+      responses:
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FoundReportDtoResponse'
+        '401':
+          description: Unauthorized
+    put:
+      tags:
+        - Report
+      summary: Update a found report by Id
+      parameters:
+        - name: reportId
+          in: path
+          required: true
+          description: Id of the report
+          schema:
+            type: number
+            minimum: 1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+                $ref: '#/components/schemas/FoundReportDtoRequest'
+      responses:
+        '200':
+          description: Successfully updated a report
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FoundReportDtoResponse'
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+    delete:
+      tags:
+        - Report
+      summary: Delete a found report by Id
+      parameters:
+        - name: reportId
+          in: path
+          required: true
+          description: Id of the report
+          schema:
+            type: number
+            minimum: 1
+      responses:
+        '204':
+          description: Successfully deleted a report
+        '401':
+          description: Unauthorized
+
+  /reports/lost:
     get:
       tags:
         - Report
       summary: Get a list of all lost reports
+      parameters:
+        - name: category
+          in: query
+          required: false
+          description: Category of the report
+          schema:
+            $ref: '#/components/schemas/Category'
+        - name: latitude
+          in: query
+          required: false
+          description: Location to search for lost reports
+          schema:
+            type: number
+            minimum: -90
+            maximum: 90
+        - name: longitude
+          in: query
+          required: false
+          description: Location to search for lost reports
+          schema:
+            type: number
+            minimum: -180
+            maximum: 180
+        - name: radius
+          in: query
+          required: false
+          description: Radius of the location filter
+          schema:
+            type: number
+            minimum: 1
+            maximum: 100
       responses:
         '200':
-          description: Successfully listed a report
+          description: Successful
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/LostReportDtoResponse'
+        '204':
+          description: No reports found
+        '401':
+          description: Unauthorized
+    post:
+      tags:
+        - Report
+      summary: Create a new lost report
+      requestBody:
+          required: true
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LostReportDtoRequest'
+      responses:
+        '201':
+          description: Successfully created a report
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LostReportDtoResponse'
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+
+  /reports/lost/{reportId}:
+    get:
+      tags:
+        - Report
+      summary: Get a lost report by Id
+      parameters:
+        - name: reportId
+          in: path
+          required: true
+          description: Id of the report
+          schema:
+            type: number
+            minimum: 1
+      responses:
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LostReportDtoResponse'
+        '401':
+          description: Unauthorized
+    put:
+      tags:
+        - Report
+      summary: Update a lost report by Id
+      parameters:
+        - name: reportId
+          in: path
+          required: true
+          description: Id of the report
+          schema:
+            type: number
+            minimum: 1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LostReportDtoRequest'
+      responses:
+        '200':
+          description: Successfully updated a report
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LostReportDtoResponse'
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+    delete:
+      tags:
+        - Report
+      summary: Delete a lost report by Id
+      parameters:
+        - name: reportId
+          in: path
+          required: true
+          description: Id of the report
+          schema:
+            type: number
+            minimum: 1
+      responses:
+        '204':
+          description: Successfully deleted a report
+        '401':
+          description: Unauthorized
+
+  /categories:
+    get:
+      tags:
+        - Category
+      summary: Get all categories
+      responses:
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Category'
+        '401':
+          description: Unauthorized
+
+  /chats:
+    get:
+      tags:
+       - Chat
+      summary: Get all chats of a user
+      responses:
+          '200':
+              description: Successful
+              content:
+                application/json:
+                  schema:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ChatDtoResponse'
+          '204':
+              description: No chats found
+          '401':
+              description: Unauthorized
+    post:
+      tags:
+        - Chat
+      summary: Create a new chat
+      requestBody:
+          required: true
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChatDtoRequest'
+      responses:
+          '201':
+            description: Successfully created a chat
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/ChatDtoResponse'
+          '400':
+            description: Bad request
+          '401':
+            description: Unauthorized
+
+  /chats/{chatId}:
+    get:
+      tags:
+        - Chat
+      summary: Get a chat by Id
+      parameters:
+        - name: chatId
+          in: path
+          required: true
+          description: Id of the chat
+          schema:
+            type: number
+            minimum: 1
+      responses:
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                 $ref: '#/components/schemas/ChatDtoResponse'
+        '401':
+          description: Unauthorized
+    patch:
+      tags:
+        - Chat
+      summary: Add a message to a chat
+      parameters:
+        - name: chatId
+          in: path
+          required: true
+          description: Id of the chat
+          schema:
+            type: number
+            minimum: 1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MessageDtoRequest'
+      responses:
+        '200':
+          description: Successfully updated chat
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChatDtoResponse'
+        '401':
+          description: Unauthorized
+
+
+
 
 
 components:
   schemas:
-    User:
+    AuthDtoRequest:
+        type: object
+        required:
+            - email
+            - password
+        properties:
+          email:
+            type: string
+            required: true
+            uniqueItems: true
+            description: The user's email
+          password:
+            type: string
+            required: true
+            description: The user's password
+
+    UserDtoRequest:
+      type: object
+      properties:
+        homeLocation:
+          $ref: '#/components/schemas/Location'
+        homeRadius:
+          type: integer
+          minimum: 1
+          maximum: 100
+        useCurrentLocation:
+          type: boolean
+        receiveNotifications:
+          type: boolean
+
+
+    UserDtoResponse:
       type: object
       properties:
         id:
-          type: string
-          required: true
-          readOnly: true
-          uniqueItems: true
-          description: The user ID
+          type: number
+          minimum: 1
         email:
           type: string
           required: true
           uniqueItems: true
           description: The user's email
-        password:
-          type: string
-          required: true
-          description: The user's password
         username:
           type: string
           required: true
           description: The user's username
-        firstname:
-          type: string
-          required: true
-          description: The user's first name
-        lastname:
-          type: string
-          required: true
-          description: The user's last name
-
-    Report:
-      type: object
-      properties:
-        id:
+        homeLocation:
+          $ref: '#/components/schemas/Location'
+        homeRadius:
           type: integer
-          minimum: 0
+          minimum: 1
+          maximum: 100
+        useCurrentLocation:
+          type: boolean
+        receiveNotifications:
+          type: boolean
+
+    LostReportDtoRequest:
+      type: object
+      required:
+        - title
+        - description
+        - imagePath
+        - category
+        - lastSeenDate
+        - lastSeenLocation
+        - lostRadius
+      properties:
         title:
           type: string
           minLength: 1
-          maxLength: 300
-        user:
+          maxLength: 30
+        description:
           type: string
           minLength: 1
-          maxLength: 100
+          maxLength: 300
+        imagePath:
+          type: string
+          format: uri
+        category:
+          $ref: '#/components/schemas/Category'
+        lastSeenDate:
+            type: string
+            format: date-time
+        lastSeenLocation:
+            $ref: '#/components/schemas/Location'
+        lostLocation:
+            $ref: '#/components/schemas/Location'
+        lostRadius:
+            type: integer
+            minimum: 1
+            maximum: 100
+
+    LostReportDtoResponse:
+      type: object
+      properties:
+        id:
+          type: number
+          minimum: 1
+        title:
+          type: string
+          minLength: 1
+          maxLength: 30
+        description:
+          type: string
+          minLength: 1
+          maxLength: 300
+        imagePath:
+          type: string
+          format: uri
+        createdAt:
+          type: string
+          format: date-time
+        isFinished:
+          type: boolean
+        category:
+          $ref: '#/components/schemas/Category'
+        lastSeenDate:
+          type: string
+          format: date-time
+        lastSeenLocation:
+          $ref: '#/components/schemas/Location'
+        lostLocation:
+          $ref: '#/components/schemas/Location'
+        lostRadius:
+          type: integer
+          minimum: 1
+          maximum: 100
+
+    FoundReportDtoRequest:
+      type: object
+      required:
+        - title
+        - description
+        - imagePath
+        - category
+        - foundDate
+        - foundLocation
+      properties:
+        title:
+          type: string
+          minLength: 1
+          maxLength: 30
+        description:
+          type: string
+          minLength: 1
+          maxLength: 300
+        imagePath:
+          type: string
+          format: uri
+        category:
+          $ref: '#/components/schemas/Category'
+        foundDate:
+          type: string
+          format: date-time
+        foundLocation:
+          $ref: '#/components/schemas/Location'
+        currentLocation:
+          $ref: '#/components/schemas/Location'
+
+    FoundReportDtoResponse:
+      type: object
+      properties:
+        id:
+          type: number
+          minimum: 1
+        title:
+          type: string
+          minLength: 1
+          maxLength: 30
+        description:
+          type: string
+          minLength: 1
+          maxLength: 300
+        imagePath:
+          type: string
+          format: uri
+        createdAt:
+          type: string
+          format: date-time
+        isFinished:
+          type: boolean
+        category:
+          $ref: '#/components/schemas/Category'
+        foundDate:
+          type: string
+          format: date-time
+        foundLocation:
+          $ref: '#/components/schemas/Location'
+        currentLocation:
+          $ref: '#/components/schemas/Location'
+
+    ChatDtoRequest:
+      type: object
+      properties:
+        reportId:
+          type: number
+          minimum: 1
+
+    ChatDtoResponse:
+      type: object
+      properties:
+        id:
+          type: number
+          minimum: 1
+        messages:
+          type: array
+          items:
+            $ref: '#/components/schemas/MessageDtoResponse'
+        reportId:
+          type: number
+          minimum: 1
+        reportVisitor:
+          $ref: '#/components/schemas/ChatPartnerDto'
+        reportCreator:
+          $ref: '#/components/schemas/ChatPartnerDto'
+
+    MessageDtoRequest:
+      type: object
+      properties:
+        isImage:
+          type: boolean
+        content:
+          type: string
+          format: form-data
+        sentAt:
+          type: string
+          format: date-time
+        sender:
+          $ref: '#/components/schemas/ChatPartnerDto'
+
+    MessageDtoResponse:
+      type: object
+      properties:
+        id:
+          type: number
+          minimum: 1
+        isImage:
+          type: boolean
+        content:
+          type: string
+          minLength: 1
+          maxLength: 300
+        sentAt:
+          type: string
+          format: date-time
+        sender:
+          $ref: '#/components/schemas/ChatPartnerDto'
+
+    ChatPartnerDto:
+        type: object
+        properties:
+          id:
+            type: number
+            minimum: 1
+
+          username:
+            type: string
+            minLength: 1
+            maxLength: 30
+
+    Location:
+      type: object
+      properties:
+        id:
+          type: number
+          minimum: 1
+        latitude:
+          type: number
+          minimum: -90
+          maximum: 90
+        longitude:
+          type: number
+          minimum: -180
+          maximum: 180
+
+    Category:
+        type: object
+        properties:
+          id:
+            type: number
+            minimum: 1
+
+          name:
+            type: string
+            minLength: 1
+            maxLength: 30
+          value:
+            $ref: '#/components/schemas/ValueType'
+
+    ValueType:
+      type: string
+      enum:
+        - LOW
+        - HIGH
+
+
+
+
