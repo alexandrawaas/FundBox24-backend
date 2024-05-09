@@ -522,7 +522,7 @@ components:
         homeLocation:
           $ref: '#/components/schemas/Location'
         homeRadius:
-          type: integer
+          type: number
           minimum: 1
           maximum: 100
         useCurrentLocation:
@@ -546,7 +546,7 @@ components:
         homeLocation:
           $ref: '#/components/schemas/Location'
         homeRadius:
-          type: integer
+          type: number
           minimum: 1
           maximum: 100
         useCurrentLocation:
@@ -587,7 +587,8 @@ components:
         lostLocation:
             $ref: '#/components/schemas/Location'
         lostRadius:
-            type: integer
+            type: number
+
             minimum: 1
             maximum: 100
 
@@ -623,7 +624,7 @@ components:
         lostLocation:
           $ref: '#/components/schemas/Location'
         lostRadius:
-          type: integer
+          type: number
           minimum: 1
           maximum: 100
         myChats:
