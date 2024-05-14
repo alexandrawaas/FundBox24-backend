@@ -1,42 +1,42 @@
 package com.example.fundbox24backend.api.datatransfer.message;
 
 import com.example.fundbox24backend.api.datatransfer.chat.ChatConverter;
+import com.example.fundbox24backend.api.datatransfer.chat.ChatPartnerDtoResponse;
 import com.example.fundbox24backend.api.model.ImageMessage;
 import com.example.fundbox24backend.api.model.Message;
 import com.example.fundbox24backend.api.model.TextMessage;
-import com.example.fundbox24backend.api.service.AuthService;
+import com.example.fundbox24backend.api.model.User;
+import com.example.fundbox24backend.api.service.UserService;
 import org.springframework.stereotype.Service;
 
 @Service
 public class MessageConverter
 {
-    private ChatConverter chatConverter;
-    private AuthService authService;
-    public MessageDtoResponse convertToDtoResponse(Message message)
+    public MessageDtoResponse convertToDtoResponse(Message message, ChatPartnerDtoResponse sender)
     {
         return new MessageDtoResponse(
                 message.getId(),
                 message.getContent(),
                 message instanceof ImageMessage,
                 message.getSentAt(),
-                chatConverter.convertToChatPartnerDtoResponse(message.getSender())
+                sender
                 );
     }
 
-    public Message convertToEntity(MessageDtoRequest messageDtoRequest)
+    public Message convertToEntity(MessageDtoRequest messageDtoRequest, User user)
     {
         if (messageDtoRequest.getIsImage())
         {
             return new ImageMessage(
                     messageDtoRequest.getSentAt(),
-                    authService.getCurrentUser(),
+                    user,
                     messageDtoRequest.getContent()
             );
         }
 
         return new TextMessage(
                 messageDtoRequest.getSentAt(),
-                authService.getCurrentUser(),
+                user,
                 messageDtoRequest.getContent()
         );
     }

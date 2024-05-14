@@ -15,13 +15,12 @@ public class MessageDtoResponse
     @JsonProperty("sentAt") private LocalDateTime sentAt;
     @JsonProperty("sender") private ChatPartnerDtoResponse sender;
 
-    public MessageDtoResponse(Long id, String text, Boolean isImage, LocalDateTime sentAt, ChatPartnerDtoResponse chatPartnerDtoResponse)
+    public MessageDtoResponse(Long id, String content, Boolean isImage, LocalDateTime sentAt, ChatPartnerDtoResponse chatPartnerDtoResponse)
     {
         this.id = id;
         this.isImage = isImage;
-        this.content = text;
+        this.content = content;
         this.sentAt = sentAt;
         this.sender = chatPartnerDtoResponse;
-
     }
 }

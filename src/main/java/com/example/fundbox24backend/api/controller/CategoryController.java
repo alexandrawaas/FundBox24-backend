@@ -1,11 +1,8 @@
 package com.example.fundbox24backend.api.controller;
 
-import com.example.fundbox24backend.api.controller.exceptions.ChatNotFoundException;
 import com.example.fundbox24backend.api.model.Category;
-import com.example.fundbox24backend.api.model.Chat;
-import com.example.fundbox24backend.api.model.Message;
 import com.example.fundbox24backend.api.repository.CategoryRepository;
-import com.example.fundbox24backend.api.repository.ChatRepository;
+import com.example.fundbox24backend.api.service.CategoryService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,15 +11,15 @@ import java.util.List;
 class CategoryController
 {
 
-    private final CategoryRepository repository;
+    private final CategoryService categoryService;
 
-    CategoryController(CategoryRepository repository) {
-        this.repository = repository;
+    CategoryController(CategoryService categoryService) {
+        this.categoryService = categoryService;
     }
 
 
     @GetMapping("/categories")
     List<Category> getAllCategories() {
-        return repository.findAll();
+        return categoryService.getAllCategories();
     }
 }

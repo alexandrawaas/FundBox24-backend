@@ -7,6 +7,9 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Data
 @Entity
 public class User {
@@ -33,10 +36,26 @@ public class User {
 
     private boolean receiveNotifications = true;
 
+    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL)
+    private List<LostReport> lostReports = new ArrayList<LostReport>();
+
+    @OneToMany(mappedBy = "finder", cascade = CascadeType.ALL)
+    private List<FoundReport> foundReports = new ArrayList<FoundReport>();
+
+    @OneToMany(mappedBy = "reportVisitor", cascade = CascadeType.ALL)
+    private List<Chat> initiatedChats = new ArrayList<Chat>();
+
+    @OneToMany(mappedBy = "reportCreator", cascade = CascadeType.ALL)
+    private List<Chat> ownChats = new ArrayList<Chat>();
+
+    @OneToMany(mappedBy = "sender", cascade = CascadeType.ALL)
+    private List<Message> sentMessages = new ArrayList<Message>();
+
+
 
     public User(String name, String email, String password)
     {
-        this.name = name;
+        this.name = (name != null) ? name : "RANDOM NAME";  // TODO: Random generation of username
         this.email = email;
         this.password = password;
 

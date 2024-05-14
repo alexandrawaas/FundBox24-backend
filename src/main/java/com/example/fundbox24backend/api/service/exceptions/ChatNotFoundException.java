@@ -1,4 +1,4 @@
-package com.example.fundbox24backend.api.controller.exceptions;
+package com.example.fundbox24backend.api.service.exceptions;
 
 public class ChatNotFoundException extends RuntimeException
 {

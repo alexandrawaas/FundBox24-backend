@@ -13,6 +13,7 @@ public class FoundReportDtoRequest
     @JsonProperty("description") private String description;
     @JsonProperty("imagePath") private String imagePath;
     @JsonProperty("categoryId") private Long categoryId;
+    @JsonProperty("isFinished") private boolean isFinished;
     @JsonProperty("foundDate") private LocalDateTime foundDate;
     @JsonProperty("foundLocation") private Location foundLocation;
     @JsonProperty("currentLocation") private Location currentLocation;

@@ -1,63 +1,62 @@
 package com.example.fundbox24backend.api.controller;
 
-import com.example.fundbox24backend.api.controller.exceptions.ReportNotFoundException;
-import com.example.fundbox24backend.api.model.LostReport;
-import com.example.fundbox24backend.api.repository.LostReportRepository;
+
+import com.example.fundbox24backend.api.datatransfer.lostReport.LostReportDtoRequest;
+import com.example.fundbox24backend.api.datatransfer.lostReport.LostReportDtoResponse;
+import com.example.fundbox24backend.api.service.LostReportService;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
 @RestController
 class LostReportController {
 
-    private final LostReportRepository repository;
+    private final LostReportService lostReportService;
 
-    LostReportController(LostReportRepository repository) {
-        this.repository = repository;
+    LostReportController(LostReportService lostReportService) {
+        this.lostReportService = lostReportService;
     }
 
 
     @GetMapping("/report/lost")
-    List<LostReport> getAllLostReports() {
-        return repository.findAll();
+    List<LostReportDtoResponse> getAllLostReports() {
+        return lostReportService.getAllLostReports();
     }
 
     @PostMapping("/report/lost")
-    LostReport createLostReport(@RequestBody LostReport newLostReport) {
-        return repository.save(newLostReport);
+    @ResponseStatus(HttpStatus.CREATED)
+    LostReportDtoResponse createLostReport(@RequestBody LostReportDtoRequest newLostReport) {
+        return lostReportService.createLostReport(newLostReport);
     }
 
     // Single item
 
     @GetMapping("/report/lost/{id}")
-    LostReport getLostReport(@PathVariable Long id) {
+    LostReportDtoResponse getLostReport(@PathVariable Long id) {
 
-        return repository.findById(id)
-                .orElseThrow(ReportNotFoundException::new);
+        try {
+            return lostReportService.getLostReport(id);
+        }
+        catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
     }
 
     @PutMapping("/report/lost/{id}")
-    LostReport replaceLostReport(@RequestBody LostReport newLostReport, @PathVariable Long id) {
-
-        return repository.findById(id)
-                .map(report -> {
-                    report.setTitle(newLostReport.getTitle());
-                    report.setDescription(newLostReport.getDescription());
-                    report.setImagePath(newLostReport.getImagePath());
-                    report.setCreatedAt(newLostReport.getCreatedAt());
-                    report.setFinished(newLostReport.isFinished());
-                    report.setCategory(newLostReport.getCategory());
-                    report.setChats(newLostReport.getChats());
-                    report.setLastSeenDate(newLostReport.getLastSeenDate());
-                    report.setLastSeenLocation(newLostReport.getLastSeenLocation());
-                    report.setLostRadius(newLostReport.getLostRadius());
-                    return repository.save(report);
-                })
-                .orElseThrow(ReportNotFoundException::new);
+    LostReportDtoResponse replaceLostReport(@RequestBody LostReportDtoRequest newLostReport, @PathVariable Long id) {
+        try {
+            return lostReportService.replaceLostReport(newLostReport, id);
+        }
+        catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
     }
 
     @DeleteMapping("/report/lost/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     void deleteLostReport(@PathVariable Long id) {
-        repository.deleteById(id);
+        lostReportService.deleteLostReport(id);
     }
 }
