@@ -2,16 +2,22 @@ package com.example.fundbox24backend.api.datatransfer.foundReport;
 
 import com.example.fundbox24backend.api.datatransfer.chat.ChatConverter;
 import com.example.fundbox24backend.api.model.FoundReport;
+import com.example.fundbox24backend.api.model.User;
 import com.example.fundbox24backend.api.repository.CategoryRepository;
-import com.example.fundbox24backend.api.service.AuthService;
+import com.example.fundbox24backend.api.service.UserService;
 import org.springframework.stereotype.Service;
 
 @Service
 public class FoundReportConverter
 {
-    private CategoryRepository categoryRepository;
-    private AuthService authService;
-    private ChatConverter chatConverter;
+    private final CategoryRepository categoryRepository;
+    private final ChatConverter chatConverter;
+
+    public FoundReportConverter(CategoryRepository categoryRepository, ChatConverter chatConverter)
+    {
+        this.categoryRepository = categoryRepository;
+        this.chatConverter = chatConverter;
+    }
 
     public FoundReportDtoResponse convertToDtoResponse(FoundReport report)
     {
@@ -26,11 +32,11 @@ public class FoundReportConverter
                 report.getFoundDate(),
                 report.getFoundLocation(),
                 report.getCurrentLocation(),
-                report.getChats().stream().map(chat -> chatConverter.convertToDtoResponse(chat)).toList()
+                report.getChats().stream().map(chatConverter::convertToDtoResponse).toList()
         );
     }
 
-    public FoundReport convertToEntity(FoundReportDtoRequest reportDtoRequest)
+    public FoundReport convertToEntity(FoundReportDtoRequest reportDtoRequest, User user)
     {
         return new FoundReport(
                 reportDtoRequest.getTitle(),
@@ -41,7 +47,7 @@ public class FoundReportConverter
                 reportDtoRequest.getFoundDate(),
                 reportDtoRequest.getFoundLocation(),
                 reportDtoRequest.getCurrentLocation(),
-                authService.getCurrentUser()
+                user
         );
     }
 

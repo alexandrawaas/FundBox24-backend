@@ -26,7 +26,7 @@ public abstract class Report {
     private boolean isFinished = false;
     @NotNull
     @ManyToOne private Category category;
-    @OneToMany(fetch = FetchType.EAGER) private List<Chat> chats = new ArrayList<Chat>();
+    @OneToMany(cascade = CascadeType.ALL) private List<Chat> chats = new ArrayList<Chat>();
 
     public Report(String title, String description, String imagePath, boolean isFinished, Category category)
     {

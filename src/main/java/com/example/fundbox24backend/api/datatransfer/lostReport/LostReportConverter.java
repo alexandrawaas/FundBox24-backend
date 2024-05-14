@@ -2,17 +2,23 @@ package com.example.fundbox24backend.api.datatransfer.lostReport;
 
 import com.example.fundbox24backend.api.datatransfer.chat.ChatConverter;
 import com.example.fundbox24backend.api.model.LostReport;
+import com.example.fundbox24backend.api.model.User;
 import com.example.fundbox24backend.api.repository.CategoryRepository;
-import com.example.fundbox24backend.api.service.AuthService;
+import com.example.fundbox24backend.api.service.UserService;
 import org.springframework.stereotype.Service;
 
 @Service
 public class LostReportConverter
 {
 
-    private CategoryRepository categoryRepository;
-    private AuthService authService;
-    private ChatConverter chatConverter;
+    private final CategoryRepository categoryRepository;
+    private final ChatConverter chatConverter;
+
+    public LostReportConverter(CategoryRepository categoryRepository, ChatConverter chatConverter)
+    {
+        this.categoryRepository = categoryRepository;
+        this.chatConverter = chatConverter;
+    }
 
     public LostReportDtoResponse convertToDtoResponse(LostReport report)
     {
@@ -28,11 +34,11 @@ public class LostReportConverter
                 report.getLastSeenLocation(),
                 report.getLostLocation(),
                 report.getLostRadius(),
-                report.getChats().stream().map(chat -> chatConverter.convertToDtoResponse(chat)).toList()
+                report.getChats().stream().map(chatConverter::convertToDtoResponse).toList()
         );
     }
 
-    public LostReport convertToEntity(LostReportDtoRequest reportDtoRequest)
+    public LostReport convertToEntity(LostReportDtoRequest reportDtoRequest, User user)
     {
         return new LostReport(
                 reportDtoRequest.getTitle(),
@@ -44,7 +50,7 @@ public class LostReportConverter
                 reportDtoRequest.getLastSeenLocation(),
                 reportDtoRequest.getLostLocation(),
                 reportDtoRequest.getLostRadius(),
-                authService.getCurrentUser()
+                user
         );
     }
 

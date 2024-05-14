@@ -13,6 +13,7 @@ public class LostReportDtoRequest
     @JsonProperty("description") private String description;
     @JsonProperty("imagePath") private String imagePath;
     @JsonProperty("categoryId") private Long categoryId;
+    @JsonProperty("isFinished") private boolean isFinished;
     @JsonProperty("lastSeenDate") private LocalDateTime lastSeenDate;
     @JsonProperty("lastSeenLocation") private Location lastSeenLocation;
     @JsonProperty("lostLocation") private Location lostLocation;

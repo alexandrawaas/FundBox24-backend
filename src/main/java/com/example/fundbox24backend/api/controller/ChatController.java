@@ -1,12 +1,9 @@
 package com.example.fundbox24backend.api.controller;
 
-import com.example.fundbox24backend.api.controller.exceptions.ChatNotFoundException;
+import com.example.fundbox24backend.api.service.exceptions.ChatNotFoundException;
 import com.example.fundbox24backend.api.datatransfer.chat.ChatDtoRequest;
 import com.example.fundbox24backend.api.datatransfer.message.MessageDtoRequest;
 import com.example.fundbox24backend.api.model.Chat;
-import com.example.fundbox24backend.api.model.FoundReport;
-import com.example.fundbox24backend.api.model.Message;
-import com.example.fundbox24backend.api.repository.ChatRepository;
 import com.example.fundbox24backend.api.service.ChatService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -23,12 +20,6 @@ class ChatController {
         this.chatService = chatService;
     }
 
-    @GetMapping("/chat")
-    List<Chat> getAllChats() {
-        //TODO: Implement filtered by user id
-        return chatService.getChats();
-    }
-
     @PostMapping("/chat")
     Chat createChat(@RequestBody ChatDtoRequest chatDtoRequest) {
         return chatService.createChat(chatDtoRequest);
@@ -39,7 +30,7 @@ class ChatController {
         try {
             return chatService.getChat(chatId);
         } catch (ChatNotFoundException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Chat not found");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }
 

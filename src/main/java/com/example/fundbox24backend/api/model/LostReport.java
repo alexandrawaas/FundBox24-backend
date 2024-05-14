@@ -18,8 +18,8 @@ public class LostReport extends Report
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private LocalDateTime lastSeenDate;
     @NotNull
-    @OneToOne private Location lastSeenLocation;
-    @OneToOne private Location lostLocation = lastSeenLocation;
+    @OneToOne(cascade = CascadeType.ALL) private Location lastSeenLocation;
+    @OneToOne(cascade = CascadeType.ALL) private Location lostLocation = lastSeenLocation;
     private double lostRadius;
     @NotNull
     @ManyToOne private User owner;
