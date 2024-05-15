@@ -25,11 +25,11 @@ class Seeder {
             return args -> {
 
                 // Clear tables
-                /*foundReportRepository.deleteAll();
+                foundReportRepository.deleteAll();
                 lostReportRepository.deleteAll();
                 messageRepository.deleteAll();
                 userRepository.deleteAll();
-                categoryRepository.deleteAll();*/
+                categoryRepository.deleteAll();
 
                 // Seed categories
                 log.info("Preloading " + categoryRepository.save(new Category("Wallet", ValueType.HIGH)));
