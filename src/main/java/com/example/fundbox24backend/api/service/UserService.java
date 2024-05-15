@@ -92,6 +92,6 @@ public class UserService
     {
         List<ChatDtoResponse> chats1 = getCurrentUserEntity().getInitiatedChats().stream().map(chatConverter::convertToDtoResponse).toList();
         List<ChatDtoResponse> chats2 = getCurrentUserEntity().getOwnChats().stream().map(chatConverter::convertToDtoResponse).toList();
-        return List.of(chats1, chats2).stream().flatMap(List::stream).toList();
+        return Stream.of(chats1, chats2).flatMap(List::stream).toList();
     }
 }

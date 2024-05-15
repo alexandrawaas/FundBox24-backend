@@ -1,5 +1,6 @@
 package com.example.fundbox24backend.api.service;
 
+import com.example.fundbox24backend.api.datatransfer.chat.ChatDtoResponse;
 import com.example.fundbox24backend.api.service.exceptions.ChatNotFoundException;
 import com.example.fundbox24backend.api.datatransfer.chat.ChatConverter;
 import com.example.fundbox24backend.api.datatransfer.chat.ChatDtoRequest;
@@ -27,30 +28,27 @@ public class ChatService
         this.messageConverter = messageConverter;
     }
 
-    public List<Chat> getChats()
+    public ChatDtoResponse getChat(Long id)
     {
-        return repository.findAll();
+        return chatConverter.convertToDtoResponse(repository.findById(id).orElseThrow(ChatNotFoundException::new));
     }
 
-    public Chat getChat(Long id)
+    public ChatDtoResponse createChat(ChatDtoRequest chatDtoRequest)
     {
-        return repository.findById(id).orElseThrow(ChatNotFoundException::new);
+        return chatConverter.convertToDtoResponse(repository.save(chatConverter.convertToEntity(chatDtoRequest, userService.getCurrentUserEntity())));
     }
 
-    public Chat createChat(ChatDtoRequest chatDtoRequest)
+    public ChatDtoResponse addMessage(MessageDtoRequest newMessage, Long id)
     {
-        return repository.save(chatConverter.convertToEntity(chatDtoRequest, userService.getCurrentUserEntity()));
-    }
-
-    public Chat addMessage(MessageDtoRequest newMessage, Long id)
-    {
-        return repository.findById(id)
+        return chatConverter.convertToDtoResponse(
+                repository.findById(id)
                 .map(chat ->
                 {
                     chat.addMessage(messageConverter.convertToEntity(newMessage, userService.getCurrentUserEntity()));
                     return repository.save(chat);
                 })
-                .orElseThrow(ChatNotFoundException::new);
+                .orElseThrow(ChatNotFoundException::new)
+        );
     }
 
 }

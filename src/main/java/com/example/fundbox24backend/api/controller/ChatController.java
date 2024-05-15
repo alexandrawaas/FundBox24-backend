@@ -1,5 +1,6 @@
 package com.example.fundbox24backend.api.controller;
 
+import com.example.fundbox24backend.api.datatransfer.chat.ChatDtoResponse;
 import com.example.fundbox24backend.api.service.exceptions.ChatNotFoundException;
 import com.example.fundbox24backend.api.datatransfer.chat.ChatDtoRequest;
 import com.example.fundbox24backend.api.datatransfer.message.MessageDtoRequest;
@@ -21,12 +22,12 @@ class ChatController {
     }
 
     @PostMapping("/chat")
-    Chat createChat(@RequestBody ChatDtoRequest chatDtoRequest) {
+    ChatDtoResponse createChat(@RequestBody ChatDtoRequest chatDtoRequest) {
         return chatService.createChat(chatDtoRequest);
     }
 
     @GetMapping("/chat/{chatId}")
-    Chat getChat(@PathVariable Long chatId) {
+    ChatDtoResponse getChat(@PathVariable Long chatId) {
         try {
             return chatService.getChat(chatId);
         } catch (ChatNotFoundException e) {
@@ -35,7 +36,7 @@ class ChatController {
     }
 
     @PatchMapping("/chat/{chatId}")
-    Chat addMessage(@RequestBody MessageDtoRequest newMessage, @PathVariable Long chatId)
+    ChatDtoResponse addMessage(@RequestBody MessageDtoRequest newMessage, @PathVariable Long chatId)
     {
         try {
             return chatService.addMessage(newMessage, chatId);

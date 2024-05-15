@@ -11,12 +11,18 @@ public class ChatDtoResponse
 {
     @JsonProperty("id") private Long id;
     @JsonProperty("reportId") private Long reportId;
+    @JsonProperty("reportName") private String reportTitle;
     @JsonProperty("messages") private List<MessageDtoResponse> messages;
     @JsonProperty("reportVisitor") private ChatPartnerDtoResponse reportVisitor;
     @JsonProperty("reportCreator") private ChatPartnerDtoResponse reportCreator;
 
-    public ChatDtoResponse(Long id, Long reportId, List<MessageDtoResponse> messages, ChatPartnerDtoResponse reportVisitor, ChatPartnerDtoResponse reportCreator)
+    public ChatDtoResponse(Long id, Long reportId, String reportTitle, List<MessageDtoResponse> messages, ChatPartnerDtoResponse reportVisitor, ChatPartnerDtoResponse reportCreator)
     {
-
+        this.id = id;
+        this.reportId = reportId;
+        this.reportTitle = reportTitle;
+        this.messages = messages;
+        this.reportVisitor = reportVisitor;
+        this.reportCreator = reportCreator;
     }
 }
