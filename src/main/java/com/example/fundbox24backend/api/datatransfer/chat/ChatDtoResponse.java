@@ -11,7 +11,7 @@ public class ChatDtoResponse
 {
     @JsonProperty("id") private Long id;
     @JsonProperty("reportId") private Long reportId;
-    @JsonProperty("reportName") private String reportTitle;
+    @JsonProperty("reportTitle") private String reportTitle;
     @JsonProperty("messages") private List<MessageDtoResponse> messages;
     @JsonProperty("reportVisitor") private ChatPartnerDtoResponse reportVisitor;
     @JsonProperty("reportCreator") private ChatPartnerDtoResponse reportCreator;
