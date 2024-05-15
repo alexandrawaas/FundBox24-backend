@@ -29,4 +29,9 @@ public class FoundReport extends Report
     {
 
     }
+    @Override
+    public User getCreator()
+    {
+        return this.finder;
+    }
 }

@@ -1,69 +1,64 @@
 package com.example.fundbox24backend.api.controller;
 
-import com.example.fundbox24backend.api.controller.exceptions.ReportNotFoundException;
+import com.example.fundbox24backend.api.datatransfer.foundReport.FoundReportDtoRequest;
+import com.example.fundbox24backend.api.datatransfer.foundReport.FoundReportDtoResponse;
+import com.example.fundbox24backend.api.service.FoundReportService;
+import com.example.fundbox24backend.api.service.exceptions.ReportNotFoundException;
 import com.example.fundbox24backend.api.model.FoundReport;
 import com.example.fundbox24backend.api.repository.FoundReportRepository;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
 @RestController
 class FoundReportController {
 
-    private final FoundReportRepository repository;
+    private final FoundReportService foundReportService;
 
-    FoundReportController(FoundReportRepository repository) {
-        this.repository = repository;
+    FoundReportController(FoundReportService foundReportService) {
+        this.foundReportService = foundReportService;
     }
 
 
     @GetMapping("/report/found")
-    List<FoundReport> getAllFoundReports() {
-        return repository.findAll();
+    List<FoundReportDtoResponse> getAllFoundReports() {
+        return foundReportService.getAllFoundReports();
     }
 
     @PostMapping("/report/found")
-    FoundReport createFoundReport(@RequestBody FoundReport newFoundReport) {
-        return repository.save(newFoundReport);
+    @ResponseStatus(HttpStatus.CREATED)
+    FoundReportDtoResponse createFoundReport(@RequestBody FoundReportDtoRequest newFoundReport) {
+        return foundReportService.createFoundReport(newFoundReport);
     }
 
     // Single item
 
     @GetMapping("/report/found/{id}")
-    FoundReport getFoundReport(@PathVariable Long id) {
+    FoundReportDtoResponse getFoundReport(@PathVariable Long id) {
 
-        return repository.findById(id)
-                .orElseThrow(ReportNotFoundException::new);
+        try {
+            return foundReportService.getFoundReport(id);
+        }
+        catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
     }
 
     @PutMapping("/report/found/{id}")
-    FoundReport replaceFoundReport(@RequestBody FoundReport newFoundReport, @PathVariable Long id) {
-
-        return repository.findById(id)
-                .map(report -> {
-                    report.setTitle(newFoundReport.getTitle());
-                    report.setDescription(newFoundReport.getDescription());
-                    report.setImagePath(newFoundReport.getImagePath());
-                    report.setCreatedAt(newFoundReport.getCreatedAt());
-                    report.setFinished(newFoundReport.isFinished());
-                    report.setCategory(newFoundReport.getCategory());
-                    report.setChats(newFoundReport.getChats());
-                    report.setFoundDate(newFoundReport.getFoundDate());
-                    report.setFoundLocation(newFoundReport.getFoundLocation());
-                    report.setCurrentLocation(newFoundReport.getCurrentLocation());
-                    return repository.save(report);
-                })
-                .orElseThrow(ReportNotFoundException::new);
+    FoundReportDtoResponse replaceFoundReport(@RequestBody FoundReportDtoRequest newFoundReport, @PathVariable Long id) {
+        try {
+           return foundReportService.replaceFoundReport(newFoundReport, id);
+        }
+        catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
     }
 
     @DeleteMapping("/report/found/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     void deleteFoundReport(@PathVariable Long id) {
-        repository.deleteById(id);
+        foundReportService.deleteFoundReport(id);
     }
 }

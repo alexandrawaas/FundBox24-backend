@@ -21,8 +21,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/AuthDtoRequest
-        '
+              $ref: '#/components/schemas/AuthDtoRequest'
       responses:
         '201':
           description: Successfully created a user
@@ -37,8 +36,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/AuthDtoRequest
-        '
+              $ref: '#/components/schemas/AuthDtoRequest'
       responses:
         '200':
           description: Successfully authenticated user
@@ -52,7 +50,7 @@ paths:
         '200':
           description: Successfully logged out user
 
-  /users:
+  /user:
     get:
       tags:
         - User
@@ -93,7 +91,7 @@ paths:
         '204':
           description: Successfully deleted a user
 
-  /users/reports/found:
+  /user/report/found:
     get:
       tags:
         - User
@@ -101,12 +99,18 @@ paths:
       responses:
         '200':
           description: Successful
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/FoundReportDtoResponse'
         '204':
           description: No reports found
         '401':
           description: Unauthorized
 
-  /users/reports/lost:
+  /user/report/lost:
     get:
       tags:
         - User
@@ -114,12 +118,38 @@ paths:
       responses:
         '200':
           description: Successful
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/LostReportDtoResponse'
         '204':
           description: No reports found
         '401':
           description: Unauthorized
 
-  /reports/found:
+
+  /user/chat:
+    get:
+      tags:
+        - Chat
+      summary: Get all chats of a user
+      responses:
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ChatDtoResponse'
+        '204':
+          description: No chats found
+        '401':
+          description: Unauthorized
+
+  /report/found:
     get:
       tags:
         - Report
@@ -190,7 +220,7 @@ paths:
         '401':
           description: Unauthorized
 
-  /reports/found/{reportId}:
+  /report/found/{reportId}:
     get:
       tags:
         - Report
@@ -259,7 +289,7 @@ paths:
         '401':
           description: Unauthorized
 
-  /reports/lost:
+  /report/lost:
     get:
       tags:
         - Report
@@ -330,7 +360,7 @@ paths:
         '401':
           description: Unauthorized
 
-  /reports/lost/{reportId}:
+  /report/lost/{reportId}:
     get:
       tags:
         - Report
@@ -399,7 +429,7 @@ paths:
         '401':
           description: Unauthorized
 
-  /categories:
+  /category:
     get:
       tags:
         - Category
@@ -416,24 +446,7 @@ paths:
         '401':
           description: Unauthorized
 
-  /chats:
-    get:
-      tags:
-       - Chat
-      summary: Get all chats of a user
-      responses:
-          '200':
-              description: Successful
-              content:
-                application/json:
-                  schema:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/ChatDtoResponse'
-          '204':
-              description: No chats found
-          '401':
-              description: Unauthorized
+  /chat:
     post:
       tags:
         - Chat
@@ -456,7 +469,7 @@ paths:
           '401':
             description: Unauthorized
 
-  /chats/{chatId}:
+  /chat/{chatId}:
     get:
       tags:
         - Chat
@@ -506,26 +519,16 @@ paths:
         '401':
           description: Unauthorized
 
-
-
-
-
 components:
   schemas:
     AuthDtoRequest:
         type: object
-        required:
-            - email
-            - password
         properties:
           email:
             type: string
-            required: true
-            uniqueItems: true
             description: The user's email
           password:
             type: string
-            required: true
             description: The user's password
 
     UserDtoRequest:
@@ -534,14 +537,13 @@ components:
         homeLocation:
           $ref: '#/components/schemas/Location'
         homeRadius:
-          type: integer
+          type: number
           minimum: 1
           maximum: 100
         useCurrentLocation:
           type: boolean
         receiveNotifications:
           type: boolean
-
 
     UserDtoResponse:
       type: object
@@ -551,17 +553,15 @@ components:
           minimum: 1
         email:
           type: string
-          required: true
           uniqueItems: true
           description: The user's email
         username:
           type: string
-          required: true
           description: The user's username
         homeLocation:
           $ref: '#/components/schemas/Location'
         homeRadius:
-          type: integer
+          type: number
           minimum: 1
           maximum: 100
         useCurrentLocation:
@@ -575,7 +575,7 @@ components:
         - title
         - description
         - imagePath
-        - category
+        - categoryId
         - lastSeenDate
         - lastSeenLocation
         - lostRadius
@@ -591,8 +591,11 @@ components:
         imagePath:
           type: string
           format: uri
-        category:
-          $ref: '#/components/schemas/Category'
+        categoryId:
+            type: number
+            minimum: 1
+        isFinished:
+            type: boolean
         lastSeenDate:
             type: string
             format: date-time
@@ -601,7 +604,8 @@ components:
         lostLocation:
             $ref: '#/components/schemas/Location'
         lostRadius:
-            type: integer
+            type: number
+
             minimum: 1
             maximum: 100
 
@@ -637,9 +641,13 @@ components:
         lostLocation:
           $ref: '#/components/schemas/Location'
         lostRadius:
-          type: integer
+          type: number
           minimum: 1
           maximum: 100
+        myChats:
+          type: array
+          items:
+            $ref: '#/components/schemas/ChatDtoResponse'
 
     FoundReportDtoRequest:
       type: object
@@ -647,7 +655,7 @@ components:
         - title
         - description
         - imagePath
-        - category
+        - categoryId
         - foundDate
         - foundLocation
       properties:
@@ -662,8 +670,11 @@ components:
         imagePath:
           type: string
           format: uri
-        category:
-          $ref: '#/components/schemas/Category'
+        categoryId:
+            type: number
+            minimum: 1
+        isFinished:
+          type: boolean
         foundDate:
           type: string
           format: date-time
@@ -703,6 +714,10 @@ components:
           $ref: '#/components/schemas/Location'
         currentLocation:
           $ref: '#/components/schemas/Location'
+        myChats:
+          type: array
+          items:
+            $ref: '#/components/schemas/ChatDtoResponse'
 
     ChatDtoRequest:
       type: object
@@ -767,7 +782,6 @@ components:
           id:
             type: number
             minimum: 1
-
           username:
             type: string
             minLength: 1

@@ -13,7 +13,7 @@ public class Chat
 {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO) private Long id;
-    @OneToMany private List<Message> messages = new ArrayList<Message>();
+    @OneToMany(cascade = CascadeType.ALL) private List<Message> messages = new ArrayList<Message>();
     @NotNull
     @ManyToOne private Report report;
     @NotNull
