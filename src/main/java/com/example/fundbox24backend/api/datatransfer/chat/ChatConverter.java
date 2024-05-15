@@ -27,6 +27,7 @@ public class ChatConverter
         return new ChatDtoResponse(
                 chat.getId(),
                 chat.getReport().getId(),
+                chat.getReport().getTitle(),
                 chat.getMessages().stream().map(message -> messageConverter.convertToDtoResponse(message, convertToChatPartnerDtoResponse(message.getSender()))).toList(),
                 convertToChatPartnerDtoResponse(chat.getReportVisitor()),
                 convertToChatPartnerDtoResponse(chat.getReportCreator()));
