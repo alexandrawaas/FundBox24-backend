@@ -19,6 +19,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.mockito.ArgumentMatchers.any;
@@ -42,6 +43,7 @@ class ReportsControllerTest {
 
     private LostReportDtoRequest lostReportDtoRequest;
     private LostReportDtoResponse lostReportDtoResponse;
+    private ArrayList<LostReportDtoResponse> allLostReportsDtoResponse;
 
 
     protected String mapToJson(Object obj)
@@ -78,6 +80,9 @@ class ReportsControllerTest {
                 new Location(1.0, 1.0),
                 1.0
         );
+        allLostReportsDtoResponse = new ArrayList<>();
+        allLostReportsDtoResponse.add(lostReportDtoResponse);
+        allLostReportsDtoResponse.add(lostReportDtoResponse);
 
     }
 
@@ -94,6 +99,14 @@ class ReportsControllerTest {
         setup();
         when(service.getLostReport(1L)).thenReturn(lostReportDtoResponse);
         this.mockMvc.perform(MockMvcRequestBuilders.get("/report/lost/1")).andDo(print()).andExpect(status().isOk())
+                .andExpect(content().contentType("application/json")).andExpect(content().string(containsString("Red Bag")));
+    }
+
+    @Test
+    void testGetAllLostReport() throws Exception {
+        setup();
+        when(service.getAllLostReports()).thenReturn(allLostReportsDtoResponse);
+        this.mockMvc.perform(MockMvcRequestBuilders.get("/report/lost")).andDo(print()).andExpect(status().isOk())
                 .andExpect(content().contentType("application/json")).andExpect(content().string(containsString("Red Bag")));
     }
 }
