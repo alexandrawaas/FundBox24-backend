@@ -24,4 +24,8 @@ public class CategoryService
     {
         return repository.findById(categoryId).orElseThrow(CategoryNotFoundException::new);
     }
+    public Category createCategory(Category category)
+    {
+        return repository.save(category);
+    }
 }
