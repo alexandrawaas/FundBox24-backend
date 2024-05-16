@@ -12,8 +12,8 @@ import java.util.List;
 public class FoundReport extends Report
 {
     private LocalDateTime foundDate;
-    @OneToOne private Location foundLocation;
-    @OneToOne private Location currentLocation;
+    @OneToOne(cascade = CascadeType.ALL) private Location foundLocation;
+    @OneToOne(cascade = CascadeType.ALL) private Location currentLocation;
     @ManyToOne private User finder;
 
     public FoundReport(String title, String description, String imagePath, boolean isFinished, Category category, LocalDateTime foundDate, Location foundLocation, Location currentLocation, User finder)
@@ -28,5 +28,10 @@ public class FoundReport extends Report
     public FoundReport()
     {
 
+    }
+    @Override
+    public User getCreator()
+    {
+        return this.finder;
     }
 }

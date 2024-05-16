@@ -1,71 +1,47 @@
 package com.example.fundbox24backend.api.controller;
 
-import com.example.fundbox24backend.api.controller.exceptions.ChatNotFoundException;
+import com.example.fundbox24backend.api.datatransfer.chat.ChatDtoResponse;
+import com.example.fundbox24backend.api.service.exceptions.ChatNotFoundException;
+import com.example.fundbox24backend.api.datatransfer.chat.ChatDtoRequest;
+import com.example.fundbox24backend.api.datatransfer.message.MessageDtoRequest;
 import com.example.fundbox24backend.api.model.Chat;
-import com.example.fundbox24backend.api.model.FoundReport;
-import com.example.fundbox24backend.api.model.Message;
-import com.example.fundbox24backend.api.repository.ChatRepository;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import com.example.fundbox24backend.api.service.ChatService;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
 @RestController
 class ChatController {
 
-    private final ChatRepository repository;
+    private final ChatService chatService;
 
-    ChatController(ChatRepository repository) {
-        this.repository = repository;
-    }
-
-
-    @GetMapping("/chat")
-    List<Chat> getAllChats() {
-        //TODO: Implement filtered by user id
-        return repository.findAll();
+    ChatController(ChatService chatService) {
+        this.chatService = chatService;
     }
 
     @PostMapping("/chat")
-    Chat createChat(@RequestBody Chat newChat) {
-
-        return repository.save(newChat);
+    ChatDtoResponse createChat(@RequestBody ChatDtoRequest chatDtoRequest) {
+        return chatService.createChat(chatDtoRequest);
     }
 
-    @GetMapping("/chat/{id}")
-    Chat getChat(@PathVariable Long id) {
-
-        return repository.findById(id)
-                .orElseThrow(ChatNotFoundException::new);
+    @GetMapping("/chat/{chatId}")
+    ChatDtoResponse getChat(@PathVariable Long chatId) {
+        try {
+            return chatService.getChat(chatId);
+        } catch (ChatNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
     }
 
-    @DeleteMapping("/chat/{id}")
-    void deleteChat(@PathVariable Long id) {
-        repository.deleteById(id);
-    }
-
-    @GetMapping("/chat/{id}/messages")
-    List<Message> getMessages(@PathVariable Long id)
+    @PatchMapping("/chat/{chatId}")
+    ChatDtoResponse addMessage(@RequestBody MessageDtoRequest newMessage, @PathVariable Long chatId)
     {
-        return repository.findById(id)
-                .orElseThrow(ChatNotFoundException::new)
-                .getMessages();
-    }
-
-    @PostMapping("/chat/{id}/messages")
-    Chat addMessage(@RequestBody Message newMessage, @PathVariable Long id)
-    {
-        return repository.findById(id)
-                .map(chat ->
-                {
-                    chat.addMessage(newMessage);
-                    return repository.save(chat);
-                })
-                .orElseThrow(ChatNotFoundException::new);
+        try {
+            return chatService.addMessage(newMessage, chatId);
+        } catch (ChatNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Chat not found");
+        }
     }
 }

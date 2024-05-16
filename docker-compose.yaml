@@ -1,9 +1,9 @@
 services:
   fundbox24-backend:
     container_name: fundbox24-spring
-    build:
-      context: ./
-      dockerfile: Dockerfile
+    build: .
+    volumes:
+      - ./src:/app/src
     ports:
       - '8080:8080'
     depends_on:

@@ -8,11 +8,5 @@ COPY gradlew .
 COPY build.gradle.kts .
 COPY settings.gradle.kts .
 
-# Copy src folder
-COPY src src
-
-# Build a jar file
-RUN /app/gradlew build
-
-# Run jar file
-CMD ["java", "-jar", "build/libs/fundbox24-backend-0.0.1-SNAPSHOT.jar"]
+# Run the app
+CMD ["./gradlew", "bootRun"]
