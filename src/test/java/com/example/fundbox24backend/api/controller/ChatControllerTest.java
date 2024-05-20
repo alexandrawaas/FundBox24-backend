@@ -175,7 +175,7 @@ class ChatControllerTest {
                 .andExpect(jsonPath("$.messages[0].content").value(messageDtoResponse.getContent()))
                 .andExpect(jsonPath("$.messages[0].isImage").value(messageDtoResponse.getIsImage()))
                 .andExpect(jsonPath("$.messages[0].sentAt").value(messageDtoResponse.getSentAt().toString()))
-                .andExpect(jsonPath("$.messages[0].chatPartnerDtoResponse.id").value(messageDtoResponse.getId()))
+                .andExpect(jsonPath("$.messages[0].chatPartnerDtoResponse.id").value(messageDtoResponse.getSender().getId()))
                 .andExpect(jsonPath("$.messages[0].chatPartnerDtoResponse.name").value(messageDtoResponse.getSender().getUsername()))
                 .andExpect(jsonPath("$.reportVisitor.id").value(chatDtoResponse.getReportVisitor().getId()))
                 .andExpect(jsonPath("$.reportVisitor.name").value(chatDtoResponse.getReportVisitor().getUsername()))
