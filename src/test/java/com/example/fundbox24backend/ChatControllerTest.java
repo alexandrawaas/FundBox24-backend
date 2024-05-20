@@ -74,7 +74,7 @@ class ChatControllerTest {
     }
 
     @Test
-    void testGetChat_NotFound() throws Exception {
+    void testGetChatNotFound() throws Exception {
         when(chatService.getChat(1L)).thenThrow(new ChatNotFoundException());
         mockMvc.perform(MockMvcRequestBuilders.get("/chat/1"))
                 .andExpect(status().isNotFound());
@@ -105,7 +105,7 @@ class ChatControllerTest {
     }
 
     @Test
-    void testAddMessage_ChatNotFound() throws Exception {
+    void testAddMessageChatNotFound() throws Exception {
         when(chatService.addMessage(any(), any())).thenThrow(new ChatNotFoundException());
         mockMvc.perform(MockMvcRequestBuilders.patch("/chat/1")
                         .contentType(MediaType.APPLICATION_JSON)
