@@ -30,7 +30,7 @@ class ChatControllerTest {
 
     @Test
     void testCreateChat() throws Exception {
-        ChatDtoRequest request = new ChatDtoRequest();
+        //ChatDtoRequest request = new ChatDtoRequest();
         ChatDtoResponse response = new ChatDtoResponse(
                 1L,
                 1L,
@@ -82,7 +82,7 @@ class ChatControllerTest {
 
     @Test
     void testAddMessage() throws Exception {
-        ChatDtoRequest request = new ChatDtoRequest();
+        //ChatDtoRequest request = new ChatDtoRequest();
         ChatDtoResponse response = new ChatDtoResponse(
                 1L,
                 1L,
