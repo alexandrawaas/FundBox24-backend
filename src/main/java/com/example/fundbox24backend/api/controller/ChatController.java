@@ -13,7 +13,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.List;
 
 @RestController
-class ChatController {
+public class ChatController {
 
     private final ChatService chatService;
 
