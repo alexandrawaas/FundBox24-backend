@@ -1,214 +1,202 @@
 package com.example.fundbox24backend.api.controller;
 
-import com.example.fundbox24backend.api.controller.exceptions.ChatNotFoundException;
-import com.example.fundbox24backend.api.model.Chat;
-import com.example.fundbox24backend.api.model.Message;
-import com.example.fundbox24backend.api.model.TextMessage;
-import com.example.fundbox24backend.api.model.ImageMessage;
-import com.example.fundbox24backend.api.repository.ChatRepository;
+import com.example.fundbox24backend.api.datatransfer.chat.ChatDtoRequest;
+import com.example.fundbox24backend.api.datatransfer.chat.ChatDtoResponse;
+import com.example.fundbox24backend.api.datatransfer.chat.ChatPartnerDtoResponse;
+import com.example.fundbox24backend.api.datatransfer.message.MessageDtoRequest;
+import com.example.fundbox24backend.api.datatransfer.message.MessageDtoResponse;
+import com.example.fundbox24backend.api.service.ChatService;
+import com.example.fundbox24backend.api.service.exceptions.ChatNotFoundException;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.MockitoAnnotations;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.http.MediaType;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.Collections;
+import java.time.LocalDateTime;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@ExtendWith(MockitoExtension.class)
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+@ExtendWith(SpringExtension.class)
+@AutoConfigureMockMvc
 class ChatControllerTest {
 
     @Mock
-    private ChatRepository repository;
+    private ChatService chatService;
 
+    @InjectMocks
     private ChatController chatController;
+
+    private MockMvc mockMvc;
+
+    AutoCloseable openMocks;
+
+    private static final Logger logger = LoggerFactory.getLogger(ChatControllerTest.class);
 
     @BeforeEach
     void setUp() {
-        chatController = new ChatController(repository);
+        openMocks = MockitoAnnotations.openMocks(this);
+        mockMvc = MockMvcBuilders.standaloneSetup(chatController).build();
+    }
+
+    @AfterEach
+    void tearDown() {
+        try {
+            openMocks.close();
+        } catch (Exception e) {
+            logger.error("Error occurred while closing mocks", e);
+        }
     }
 
     @Test
-    void GetAllChatsTest() {
-        // Mock some chats
-        List<Chat> mockChats = new ArrayList<>();
-        mockChats.add(new Chat());
-        mockChats.add(new Chat());
+    void createChatTest() throws Exception {
+        ChatDtoRequest chatDtoRequest = new ChatDtoRequest();
+        ChatDtoResponse chatDtoResponse = new ChatDtoResponse(
+                1L,
+                1L,
+                "Test Report Title",
+                Collections.emptyList(),
+                new ChatPartnerDtoResponse(1L, "Visitor"),
+                new ChatPartnerDtoResponse(2L, "Creator")
+        );
 
-        // Mock the repository behavior
-        when(repository.findAll()).thenReturn(mockChats);
+        when(chatService.createChat(chatDtoRequest)).thenReturn(chatDtoResponse);
 
-        // Call the controller method
-        List<Chat> allChats = chatController.getAllChats();
+        mockMvc.perform(post("/chat")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"reportId\": 1, \"reportVisitorId\": 1, \"reportCreatorId\": 1}"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.id").value(chatDtoResponse.getId()))
+                .andExpect(jsonPath("$.reportId").value(chatDtoResponse.getReportId()))
+                .andExpect(jsonPath("$.reportTitle").value(chatDtoResponse.getReportTitle()))
+                .andExpect(jsonPath("$.messages").isArray())
+                .andExpect(jsonPath("$.reportVisitor.id").value(chatDtoResponse.getReportVisitor().getId()))
+                .andExpect(jsonPath("$.reportVisitor.name").value(chatDtoResponse.getReportVisitor().getUsername()))
+                .andExpect(jsonPath("$.reportCreator.id").value(chatDtoResponse.getReportCreator().getId()))
+                .andExpect(jsonPath("$.reportCreator.name").value(chatDtoResponse.getReportCreator().getUsername()));
 
-        // Assertions
-        assertEquals(mockChats, allChats);
+        verify(chatService, times(1)).createChat(any(ChatDtoRequest.class));
     }
 
     @Test
-    void CreateChatTest() {
-        // Create a new chat object
-        Chat newChat = new Chat();
+    void getChatTest() throws Exception {
+        Long chatId = 1L;
+        ChatDtoResponse chatDtoResponse = new ChatDtoResponse(
+                chatId,
+                1L,
+                "Test Report Title",
+                Collections.emptyList(),
+                new ChatPartnerDtoResponse(1L, "Visitor"),
+                new ChatPartnerDtoResponse(2L, "Creator")
+        );
 
-        // Mock the repository behavior
-        when(repository.save(newChat)).thenReturn(newChat);
+        when(chatService.getChat(chatId)).thenReturn(chatDtoResponse);
 
-        // Call the controller method
-        Chat createdChat = chatController.createChat(newChat);
+        mockMvc.perform(get("/chat/{chatId}", chatId)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.id").value(chatDtoResponse.getId()))
+                .andExpect(jsonPath("$.reportId").value(chatDtoResponse.getReportId()))
+                .andExpect(jsonPath("$.reportTitle").value(chatDtoResponse.getReportTitle()))
+                .andExpect(jsonPath("$.messages").isArray())
+                .andExpect(jsonPath("$.reportVisitor.id").value(chatDtoResponse.getReportVisitor().getId()))
+                .andExpect(jsonPath("$.reportVisitor.name").value(chatDtoResponse.getReportVisitor().getUsername()))
+                .andExpect(jsonPath("$.reportCreator.id").value(chatDtoResponse.getReportCreator().getId()))
+                .andExpect(jsonPath("$.reportCreator.name").value(chatDtoResponse.getReportCreator().getUsername()));
 
-        // Assertions
-        assertNotNull(createdChat);
-        assertEquals(newChat, createdChat);
+        verify(chatService, times(1)).getChat(chatId);
     }
 
     @Test
-    void GetChatTest() {
-        // Define an existing chat id
+    void getChatNotFoundTest() throws Exception {
         Long chatId = 1L;
 
-        // Mock a chat object
-        Chat mockChat = new Chat();
-        mockChat.setId(chatId);
+        when(chatService.getChat(chatId)).thenThrow(new ChatNotFoundException());
 
-        // Mock the repository behavior
-        when(repository.findById(chatId)).thenReturn(Optional.of(mockChat));
+        mockMvc.perform(get("/chat/{chatId}", chatId)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
 
-        // Call the controller method
-        Chat foundChat = chatController.getChat(chatId);
-
-        // Assertions
-        assertNotNull(foundChat);
-        assertEquals(mockChat, foundChat);
+        verify(chatService, times(1)).getChat(chatId);
     }
 
     @Test
-    void shouldThrowChatNotFoundExceptionForNonexistentChat() {
-        // Define a non-existing chat id
+    void addMessageTest() throws Exception {
         Long chatId = 1L;
+        MessageDtoRequest messageDtoRequest = new MessageDtoRequest();
+        ChatPartnerDtoResponse chatPartnerDtoResponse = new ChatPartnerDtoResponse(1L, "User");
+        LocalDateTime sentAt = LocalDateTime.now();
 
-        // Mock the repository behavior
-        when(repository.findById(chatId)).thenReturn(Optional.empty());
+        MessageDtoResponse messageDtoResponse = new MessageDtoResponse(
+                1L,
+                "This is a test message",
+                false,
+                sentAt,
+                chatPartnerDtoResponse
+        );
 
-        // Expected exception
-        assertThrows(ChatNotFoundException.class, () -> chatController.getChat(chatId));
+        ChatDtoResponse chatDtoResponse = new ChatDtoResponse(
+                chatId,
+                1L,
+                "Test Report Title",
+                Collections.singletonList(messageDtoResponse),
+                new ChatPartnerDtoResponse(1L, "Visitor"),
+                new ChatPartnerDtoResponse(2L, "Creator")
+        );
+
+        when(chatService.addMessage(any(messageDtoRequest.getClass()), eq(chatId))).thenReturn(chatDtoResponse);
+
+        mockMvc.perform(patch("/chat/{chatId}", chatId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"text\":\"This is a test message\"}"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.id").value(chatDtoResponse.getId()))
+                .andExpect(jsonPath("$.reportId").value(chatDtoResponse.getReportId()))
+                .andExpect(jsonPath("$.reportTitle").value(chatDtoResponse.getReportTitle()))
+                .andExpect(jsonPath("$.messages").isArray())
+                .andExpect(jsonPath("$.messages[0].id").value(messageDtoResponse.getId()))
+                .andExpect(jsonPath("$.messages[0].content").value(messageDtoResponse.getContent()))
+                .andExpect(jsonPath("$.messages[0].isImage").value(messageDtoResponse.getIsImage()))
+                .andExpect(jsonPath("$.messages[0].sentAt").value(messageDtoResponse.getSentAt().toString()))
+                .andExpect(jsonPath("$.messages[0].chatPartnerDtoResponse.id").value(messageDtoResponse.getId()))
+                .andExpect(jsonPath("$.messages[0].chatPartnerDtoResponse.name").value(messageDtoResponse.getSender().getUsername()))
+                .andExpect(jsonPath("$.reportVisitor.id").value(chatDtoResponse.getReportVisitor().getId()))
+                .andExpect(jsonPath("$.reportVisitor.name").value(chatDtoResponse.getReportVisitor().getUsername()))
+                .andExpect(jsonPath("$.reportCreator.id").value(chatDtoResponse.getReportCreator().getId()))
+                .andExpect(jsonPath("$.reportCreator.name").value(chatDtoResponse.getReportCreator().getUsername()));
+
+        verify(chatService, times(1)).addMessage(any(messageDtoRequest.getClass()), eq(chatId));
     }
 
     @Test
-    void DeleteChatTest() {
-        // Define an existing chat id
+    void addMessageChatNotFoundTest() throws Exception {
         Long chatId = 1L;
+        MessageDtoRequest messageDtoRequest = new MessageDtoRequest();
 
-        // Mock the repository behavior
-        doNothing().when(repository).deleteById(chatId);
+        when(chatService.addMessage(any(messageDtoRequest.getClass()), eq(chatId))).thenThrow(new ChatNotFoundException());
 
-        // Call the controller method
-        chatController.deleteChat(chatId);
+        mockMvc.perform(patch("/chat/{chatId}", chatId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"text\":\"This is a test message\"}"))
+                .andExpect(status().isNotFound());
 
-        // Verify repository interaction
-        verify(repository, times(1)).deleteById(chatId);
-    }
-
-    @Test
-    void GetMessagesTest() {
-        // Define an existing chat id
-        Long chatId = 1L;
-
-        // Mock a chat object with messages
-        Chat mockChat = new Chat();
-        List<Message> messages = new ArrayList<>();
-        messages.add(new TextMessage());
-        mockChat.setMessages(messages);
-
-        // Mock the repository behavior
-        when(repository.findById(chatId)).thenReturn(Optional.of(mockChat));
-
-        // Call the controller method
-        List<Message> retrievedMessages = chatController.getMessages(chatId);
-
-        // Assertions
-        assertEquals(messages, retrievedMessages);
-    }
-
-    @Test
-    void shouldThrowChatNotFoundExceptionForGettingMessagesOfNonexistentChat() {
-        // Define a non-existing chat id
-        Long chatId = 1L;
-
-        // Mock the repository behavior
-        when(repository.findById(chatId)).thenReturn(Optional.empty());
-
-        // Expected exception
-        assertThrows(ChatNotFoundException.class, () -> chatController.getMessages(chatId));
-    }
-
-    @Test
-    void shouldAddTextMessageToExistingChat() {
-        // Define an existing chat id and a new text message
-        Long chatId = 1L;
-        String messageText = "This is a test message";
-        TextMessage newMessage = new TextMessage(null, null, messageText); // Assuming sentAt and sender are not required
-
-        // Mock a chat object
-        Chat mockChat = new Chat();
-        mockChat.setId(chatId);
-        List<Message> existingMessages = new ArrayList<>();
-        mockChat.setMessages(existingMessages);
-
-        // Mock the repository behavior to find the chat
-        when(repository.findById(chatId)).thenReturn(Optional.of(mockChat));
-
-        // Mock the repository behavior to save the updated chat
-        when(repository.save(any(Chat.class))).thenAnswer(invocation -> {
-            Chat updatedChat = invocation.getArgument(0);
-            assertEquals(1, updatedChat.getMessages().size());
-            TextMessage addedMessage = (TextMessage) updatedChat.getMessages().get(0);
-            assertEquals(messageText, addedMessage.getText());
-            return updatedChat;
-        });
-
-        // Call the controller method
-        Chat updatedChat = chatController.addMessage(newMessage, chatId);
-
-        // Assertions
-        assertNotNull(updatedChat);
-        assertEquals(chatId, updatedChat.getId());
-    }
-
-    @Test
-    void shouldAddImageMessageToExistingChat() {
-        // Define an existing chat id and a new image message
-        Long chatId = 1L;
-        String imagePath = "path/to/image.jpg";
-        ImageMessage newMessage = new ImageMessage(null, null, imagePath); // Assuming sentAt and sender are not required
-
-        // Mock a chat object
-        Chat mockChat = new Chat();
-        mockChat.setId(chatId);
-        List<Message> existingMessages = new ArrayList<>();
-        mockChat.setMessages(existingMessages);
-
-        // Mock the repository behavior to find the chat
-        when(repository.findById(chatId)).thenReturn(Optional.of(mockChat));
-
-        // Mock the repository behavior to save the updated chat
-        when(repository.save(any(Chat.class))).thenAnswer(invocation -> {
-            Chat updatedChat = invocation.getArgument(0);
-            assertEquals(1, updatedChat.getMessages().size());
-            ImageMessage addedMessage = (ImageMessage) updatedChat.getMessages().get(0);
-            assertEquals(imagePath, addedMessage.getImagePath());
-            return updatedChat;
-        });
-
-        // Call the controller method
-        Chat updatedChat = chatController.addMessage(newMessage, chatId);
-
-        // Assertions
-        assertNotNull(updatedChat);
-        assertEquals(chatId, updatedChat.getId());
+        verify(chatService, times(1)).addMessage(any(messageDtoRequest.getClass()), eq(chatId));
     }
 }

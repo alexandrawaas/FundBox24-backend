@@ -30,6 +30,8 @@ dependencies {
     runtimeOnly("com.mysql:mysql-connector-j")
     annotationProcessor("org.projectlombok:lombok")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
+    //testImplementation("org.mockito:mockito-core:5.11.0")
+    //testImplementation("org.springframework.boot:spring-boot-test-autoconfigure")
 }
 
 tasks.withType<Test> {
