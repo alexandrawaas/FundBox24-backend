@@ -44,7 +44,7 @@ class Seeder {
                 User anna = userRepository.save(new User("RoterFuchs567", "anna.beispiel@test.de", "123456"));
 
                 // Seed found reports
-                log.info("Preloading " + foundReportRepository.save(new FoundReport("Rosa Handtasche mit Wasserflasche", "Eine kleine Handtasche mit Schulterriemen aus rosa gefärbtem Kunstleder. Enthalten sind eine halbvolle Wasserflasche mit Holzdeckel sowie weitere kleine Gegenstände (z.B. Haarbürste).", "/images/handbag.jpg", false, categoryRepository.findAll().get(2), LocalDateTime.of(2024, 4, 26, 15, 52), new Location(53.551086, 9.993682), new Location(53.554686, 9.003682), max)));
+                log.info("Preloading " + foundReportRepository.save(new FoundReport("Rosa Handtasche mit Wasserflasche", "Eine kleine Handtasche mit Schulterriemen aus rosa gefärbtem Kunstleder. Enthalten sind eine halbvolle Wasserflasche mit Holzdeckel sowie weitere kleine Gegenstände (z.B. Haarbürste).", "/images/handbag.jpg", false, categoryRepository.findAll().get(3), LocalDateTime.of(2024, 4, 26, 15, 52), new Location(53.551086, 9.993682), new Location(53.554686, 9.003682), max)));
 
                 foundReportRepository.save(new FoundReport("Schwarzer Geldbeutel mit 120€", "Ich habe einen klassischen Geldbeutel gefunden, der 120€ enthält und unten etwas abgenutzt ist. Ansonsten sind noch ein blauer Einkaufschip und ein Essensgutschein über 30€ enthalten.", "/images/wallet.jpg", false, categoryRepository.findAll().getFirst(), LocalDateTime.of(2024, 4, 24, 7, 0), new Location(53.554686, 9.002382), new Location(51.5542386, 9.403682), max));
 
