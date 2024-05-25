@@ -71,12 +71,19 @@ public class UserService
 
     public UserDtoResponse register(AuthDtoRequest authDtoRequest)
     {
-        // TODO: implement authentication
-        return userConverter.convertToDtoResponse(
-                userRepository.save(
-                        new User(null, authDtoRequest.getEmail(), authDtoRequest.getPassword())
-                )
+        String passwordHash = passwordEncoder.encode(
+                authDtoRequest.getPassword()
         );
+
+        User newUser = new User(
+                null,
+                authDtoRequest.getEmail(),
+                passwordHash
+        );
+
+        User createdUser = userRepository.save(newUser);
+
+        return userConverter.convertToDtoResponse(createdUser);
     }
 
     public UserDtoResponse login(AuthDtoRequest authDtoRequest)
