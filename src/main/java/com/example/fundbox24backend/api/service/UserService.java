@@ -12,9 +12,16 @@ import com.example.fundbox24backend.api.datatransfer.user.UserDtoRequest;
 import com.example.fundbox24backend.api.datatransfer.user.UserDtoResponse;
 import com.example.fundbox24backend.api.model.User;
 import com.example.fundbox24backend.api.repository.UserRepository;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Stream;
 
 @Service
@@ -25,26 +32,31 @@ public class UserService
     private final LostReportConverter lostReportConverter;
     private final FoundReportConverter foundReportConverter;
     private final ChatConverter chatConverter;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository userRepository, UserConverter userConverter, LostReportConverter lostReportConverter, FoundReportConverter foundReportConverter, ChatConverter chatConverter)
+    public UserService(UserRepository userRepository, UserConverter userConverter, LostReportConverter lostReportConverter, FoundReportConverter foundReportConverter, ChatConverter chatConverter, PasswordEncoder passwordEncoder)
     {
         this.userRepository = userRepository;
         this.userConverter = userConverter;
         this.lostReportConverter = lostReportConverter;
         this.foundReportConverter = foundReportConverter;
         this.chatConverter = chatConverter;
+        this.passwordEncoder = passwordEncoder;
     }
 
-    public UserDtoResponse getCurrentUser()
-    {
-        // TODO: implement getCurrentUser
-        return userConverter.convertToDtoResponse(userRepository.findAll().getFirst());
+    public UserDtoResponse getCurrentUser() {
+        User user = getCurrentUserEntity();
+        return userConverter.convertToDtoResponse(user);
     }
 
     public User getCurrentUserEntity()
     {
-        // TODO: implement getCurrentUser
-        return userRepository.findAll().getFirst();
+        String email = SecurityContextHolder
+                .getContext()
+                .getAuthentication()
+                .getName();
+
+        return userRepository.findByEmail(email);
     }
 
     public UserDtoResponse updateUser(UserDtoRequest userDtoRequest)
@@ -69,8 +81,23 @@ public class UserService
 
     public UserDtoResponse login(AuthDtoRequest authDtoRequest)
     {
-        // TODO: implement authentication
-        return getCurrentUser();
+        User user = userRepository.findByEmail(
+                authDtoRequest.getEmail()
+        );
+
+        if (user == null) {
+            throw new BadCredentialsException("User not found");
+        }
+
+        String passwordHash = passwordEncoder.encode(
+                authDtoRequest.getPassword()
+        );
+
+        if (!authDtoRequest.getPassword().equals(passwordHash)) {
+            throw new BadCredentialsException("Wrong password");
+        }
+
+        return userConverter.convertToDtoResponse(user);
     }
 
     public void logout()

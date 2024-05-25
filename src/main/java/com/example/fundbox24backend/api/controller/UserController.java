@@ -20,7 +20,6 @@ public class UserController {
 
     @GetMapping("/user")
     public UserDtoResponse getUser() {
-        //TODO: Implement with token
         return userService.getCurrentUser();
     }
 
@@ -56,7 +55,6 @@ public class UserController {
     @PostMapping("/logut")
     public void logout() {
         userService.logout();
-        return;
     }
 
     @PostMapping("/register")
