@@ -12,16 +12,11 @@ import com.example.fundbox24backend.api.datatransfer.user.UserDtoRequest;
 import com.example.fundbox24backend.api.datatransfer.user.UserDtoResponse;
 import com.example.fundbox24backend.api.model.User;
 import com.example.fundbox24backend.api.repository.UserRepository;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Stream;
 
 @Service
@@ -46,6 +41,7 @@ public class UserService
 
     public UserDtoResponse getCurrentUser() {
         User user = getCurrentUserEntity();
+
         return userConverter.convertToDtoResponse(user);
     }
 
@@ -86,32 +82,12 @@ public class UserService
         return userConverter.convertToDtoResponse(createdUser);
     }
 
-    public UserDtoResponse login(AuthDtoRequest authDtoRequest)
+    public UserDtoResponse login()
     {
-        User user = userRepository.findByEmail(
-                authDtoRequest.getEmail()
-        );
-
-        if (user == null) {
-            throw new BadCredentialsException("User not found");
-        }
-
-        String passwordHash = passwordEncoder.encode(
-                authDtoRequest.getPassword()
-        );
-
-        if (!authDtoRequest.getPassword().equals(passwordHash)) {
-            throw new BadCredentialsException("Wrong password");
-        }
-
-        return userConverter.convertToDtoResponse(user);
+        return getCurrentUser();
     }
 
-    public void logout()
-    {
-        // TODO: Should be handled on App side only 
-        //  by clearing the BasicAuth String from the local storage
-    }
+    public void logout() {}
 
     public List<LostReportDtoResponse> getUserLostReports()
     {

@@ -35,7 +35,7 @@ public class AuthConfig {
     public WebSecurityCustomizer webSecurityCustomizer() {
         return web -> web
                 .ignoring()
-                .requestMatchers("/login", "/register");
+                .requestMatchers("/register");
     }
 
     @Bean
