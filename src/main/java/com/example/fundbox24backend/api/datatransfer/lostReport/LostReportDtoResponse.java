@@ -25,6 +25,21 @@ public class LostReportDtoResponse
     @JsonProperty("lostRadius") private double lostRadius;
     @JsonProperty("myChats") private List<ChatDtoResponse> myChats;
 
+    public LostReportDtoResponse(Long id, String title, String description, String imagePath, LocalDateTime createdAt, boolean finished, Category category, LocalDateTime lastSeenDate, Location lastSeenLocation, Location lostLocation, double lostRadius)
+    {
+        this.id = id;
+        this.title = title;
+        this.description = description;
+        this.imagePath = imagePath;
+        this.createdAt = createdAt;
+        this.isFinished = finished;
+        this.category = category;
+        this.lastSeenDate = lastSeenDate;
+        this.lastSeenLocation = lastSeenLocation;
+        this.lostLocation = lostLocation;
+        this.lostRadius = lostRadius;
+    }
+
     public LostReportDtoResponse(Long id, String title, String description, String imagePath, LocalDateTime createdAt, boolean finished, Category category, LocalDateTime lastSeenDate, Location lastSeenLocation, Location lostLocation, double lostRadius, List<ChatDtoResponse> myChats)
     {
         this.id = id;
