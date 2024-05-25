@@ -739,6 +739,10 @@ components:
         reportId:
           type: number
           minimum: 1
+        reportTitle:
+          type: string
+          minLength: 1
+          maxLength: 30
         reportVisitor:
           $ref: '#/components/schemas/ChatPartnerDto'
         reportCreator:
