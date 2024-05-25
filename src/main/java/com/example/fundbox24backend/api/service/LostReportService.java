@@ -27,6 +27,7 @@ public class LostReportService
 
 
     public List<LostReportDtoResponse> getAllLostReports() {
+        // TODO: Filter implementieren
         return repository.findAll().stream().map(lostReportConverter::convertToDtoResponse).toList();
     }
 
