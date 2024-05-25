@@ -53,15 +53,15 @@ class Seeder {
 
                 // Seed users
                 User testUser1 = new User(
-                        "BlauerWal123",
-                        "max.muster@test.de",
-                        passwordEncoder.encode("123456")
+                        "LachenderLurch",
+                        "lurchi@quakmail.de",
+                        passwordEncoder.encode("lurch123")
                 );
 
                 User testUser2 = new User(
-                        "RoterFuchs567",
-                        "anna.beispiel@test.de",
-                        passwordEncoder.encode("123456")
+                        "WhopperBomber",
+                        "whopwhop@bk.com",
+                        passwordEncoder.encode("whopper123")
                 );
 
                 User max = userRepository.save(testUser1);
