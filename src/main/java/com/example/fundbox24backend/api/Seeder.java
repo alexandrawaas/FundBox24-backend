@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDateTime;
 
@@ -20,7 +21,16 @@ class Seeder {
     private static final Logger log = LoggerFactory.getLogger(Seeder.class);
 
     @Bean
-    CommandLineRunner initDatabase(CategoryRepository categoryRepository, UserRepository userRepository, FoundReportRepository foundReportRepository, LocationRepository locationRepository, ChatRepository chatRepository, LostReportRepository lostReportRepository, MessageRepository messageRepository) {
+    CommandLineRunner initDatabase(
+            CategoryRepository categoryRepository,
+            UserRepository userRepository,
+            FoundReportRepository foundReportRepository,
+            LocationRepository locationRepository,
+            ChatRepository chatRepository,
+            LostReportRepository lostReportRepository,
+            MessageRepository messageRepository,
+            PasswordEncoder passwordEncoder
+    ) {
         if(enableSeeder) {
             return args -> {
 
@@ -42,8 +52,20 @@ class Seeder {
                 log.info("Preloading " + categoryRepository.save(new Category("Other", ValueType.LOW)));
 
                 // Seed users
-                User max = userRepository.save(new User("BlauerWal123", "max.muster@test.de", "123456"));
-                User anna = userRepository.save(new User("RoterFuchs567", "anna.beispiel@test.de", "123456"));
+                User testUser1 = new User(
+                        "BlauerWal123",
+                        "max.muster@test.de",
+                        passwordEncoder.encode("123456")
+                );
+
+                User testUser2 = new User(
+                        "RoterFuchs567",
+                        "anna.beispiel@test.de",
+                        passwordEncoder.encode("123456")
+                );
+
+                User max = userRepository.save(testUser1);
+                User anna = userRepository.save(testUser2);
 
                 // Seed found reports
                 log.info("Preloading " + foundReportRepository.save(new FoundReport("Pink handbag with water bottle", "bla", "/images/handbag.jpg", false, categoryRepository.findAll().get(2), LocalDateTime.of(2024, 4, 26, 15, 52), new Location(53.551086, 9.993682), new Location(53.554686, 9.003682), max)));
