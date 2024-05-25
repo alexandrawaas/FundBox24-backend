@@ -32,6 +32,11 @@ public class AuthService implements UserDetailsService {
         return new org.springframework.security.core.userdetails.User(
                 user.getEmail(),
                 user.getPassword(),
+
+                /*
+                Don't use roles for simplicity, it just passes an empty list
+                (All users have the same privileges)
+                 */
                 Collections.emptyList()
         );
     }
