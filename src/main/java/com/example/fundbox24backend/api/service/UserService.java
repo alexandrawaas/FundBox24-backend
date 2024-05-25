@@ -109,7 +109,8 @@ public class UserService
 
     public void logout()
     {
-        // TODO: implement authentication
+        // TODO: Should be handled on App side only 
+        //  by clearing the BasicAuth String from the local storage
     }
 
     public List<LostReportDtoResponse> getUserLostReports()
