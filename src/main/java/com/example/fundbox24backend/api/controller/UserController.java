@@ -20,7 +20,6 @@ public class UserController {
 
     @GetMapping("/user")
     public UserDtoResponse getUser() {
-        //TODO: Implement with token
         return userService.getCurrentUser();
     }
 
@@ -49,14 +48,16 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public @ResponseBody UserDtoResponse login(@RequestBody AuthDtoRequest authDtoRequest) {
-        return userService.login(authDtoRequest);
+    public @ResponseBody UserDtoResponse login() {
+        return userService.login();
     }
 
     @PostMapping("/logut")
     public void logout() {
+        // TODO: Should be handled on App side only
+        //  by clearing the BasicAuth String from the local storage
+
         userService.logout();
-        return;
     }
 
     @PostMapping("/register")

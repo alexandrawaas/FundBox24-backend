@@ -12,6 +12,8 @@ import com.example.fundbox24backend.api.datatransfer.user.UserDtoRequest;
 import com.example.fundbox24backend.api.datatransfer.user.UserDtoResponse;
 import com.example.fundbox24backend.api.model.User;
 import com.example.fundbox24backend.api.repository.UserRepository;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,26 +27,32 @@ public class UserService
     private final LostReportConverter lostReportConverter;
     private final FoundReportConverter foundReportConverter;
     private final ChatConverter chatConverter;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository userRepository, UserConverter userConverter, LostReportConverter lostReportConverter, FoundReportConverter foundReportConverter, ChatConverter chatConverter)
+    public UserService(UserRepository userRepository, UserConverter userConverter, LostReportConverter lostReportConverter, FoundReportConverter foundReportConverter, ChatConverter chatConverter, PasswordEncoder passwordEncoder)
     {
         this.userRepository = userRepository;
         this.userConverter = userConverter;
         this.lostReportConverter = lostReportConverter;
         this.foundReportConverter = foundReportConverter;
         this.chatConverter = chatConverter;
+        this.passwordEncoder = passwordEncoder;
     }
 
-    public UserDtoResponse getCurrentUser()
-    {
-        // TODO: implement getCurrentUser
-        return userConverter.convertToDtoResponse(userRepository.findAll().getFirst());
+    public UserDtoResponse getCurrentUser() {
+        User user = getCurrentUserEntity();
+
+        return userConverter.convertToDtoResponse(user);
     }
 
     public User getCurrentUserEntity()
     {
-        // TODO: implement getCurrentUser
-        return userRepository.findAll().getFirst();
+        String email = SecurityContextHolder
+                .getContext()
+                .getAuthentication()
+                .getName();
+
+        return userRepository.findByEmail(email);
     }
 
     public UserDtoResponse updateUser(UserDtoRequest userDtoRequest)
@@ -59,24 +67,27 @@ public class UserService
 
     public UserDtoResponse register(AuthDtoRequest authDtoRequest)
     {
-        // TODO: implement authentication
-        return userConverter.convertToDtoResponse(
-                userRepository.save(
-                        new User(null, authDtoRequest.getEmail(), authDtoRequest.getPassword())
-                )
+        String passwordHash = passwordEncoder.encode(
+                authDtoRequest.getPassword()
         );
+
+        User newUser = new User(
+                null,
+                authDtoRequest.getEmail(),
+                passwordHash
+        );
+
+        User createdUser = userRepository.save(newUser);
+
+        return userConverter.convertToDtoResponse(createdUser);
     }
 
-    public UserDtoResponse login(AuthDtoRequest authDtoRequest)
+    public UserDtoResponse login()
     {
-        // TODO: implement authentication
         return getCurrentUser();
     }
 
-    public void logout()
-    {
-        // TODO: implement authentication
-    }
+    public void logout() {}
 
     public List<LostReportDtoResponse> getUserLostReports()
     {

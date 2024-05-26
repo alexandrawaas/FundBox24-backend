@@ -28,6 +28,7 @@ public class FoundReportService
 
 
     public List<FoundReportDtoResponse> getAllFoundReports() {
+        // TODO: Filter implementieren
         return repository.findAll().stream().map(foundReportConverter::convertToDtoResponse).toList();
     }
 

@@ -17,4 +17,17 @@ public class FoundReportDtoRequest
     @JsonProperty("foundDate") private LocalDateTime foundDate;
     @JsonProperty("foundLocation") private Location foundLocation;
     @JsonProperty("currentLocation") private Location currentLocation;
+
+    public FoundReportDtoRequest(String title, String description, String imagePath, Long categoryId, boolean isFinished, LocalDateTime foundDate, Location foundLocation, Location currentLocation)
+    {
+        this.title = title;
+        this.description = description;
+        this.imagePath = imagePath;
+        this.categoryId = categoryId;
+        this.isFinished = isFinished;
+        this.foundDate = foundDate;
+        this.foundLocation = foundLocation;
+        this.currentLocation = currentLocation;
+    }
+
 }
