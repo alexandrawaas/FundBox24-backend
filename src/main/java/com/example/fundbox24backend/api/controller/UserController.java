@@ -52,7 +52,7 @@ public class UserController {
         return userService.login();
     }
 
-    @PostMapping("/logut")
+    @PostMapping("/logout")
     public void logout() {
         // TODO: Should be handled on App side only
         //  by clearing the BasicAuth String from the local storage
