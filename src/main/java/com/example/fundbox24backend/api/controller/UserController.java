@@ -25,39 +25,27 @@ public class UserController {
 
     @PutMapping("/user")
     public @ResponseBody UserDtoResponse updateUser(@RequestBody UserDtoRequest userDtoRequest) {
-        //TODO: Implement with token
         return userService.updateUser(userDtoRequest);
     }
 
     @GetMapping("/user/report/found")
     public List<FoundReportDtoResponse> getUserFoundReports() {
-        //TODO: Implement with token
         return userService.getUserFoundReports();
     }
 
     @GetMapping("/user/report/lost")
     public List<LostReportDtoResponse> getUserLostReports() {
-        //TODO: Implement with token
         return userService.getUserLostReports();
     }
 
     @GetMapping("/user/chat")
     public List<ChatDtoResponse> getUserChats() {
-        //TODO: Implement with token
         return userService.getUserChats();
     }
 
     @PostMapping("/login")
     public @ResponseBody UserDtoResponse login() {
         return userService.login();
-    }
-
-    @PostMapping("/logout")
-    public void logout() {
-        // TODO: Should be handled on App side only
-        //  by clearing the BasicAuth String from the local storage
-
-        userService.logout();
     }
 
     @PostMapping("/register")
