@@ -21,7 +21,7 @@ public abstract class Report {
     @NotBlank(message = "Title of report cannot be empty")
     private String title;
     private String description;
-    private String imagePath;   // TODO: implement default image per category
+    private String imagePath;
     private LocalDateTime createdAt = LocalDateTime.now();
     private boolean isFinished = false;
     @NotNull

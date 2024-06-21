@@ -24,7 +24,7 @@ public class User {
     @Email(message = "Email is not valid", regexp="^[a-zA-Z0-9_!#$%&’*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$")
     private String email;
     @NotNull
-    @NotBlank(message = "Password cannot be empty")     // TODO: Password validation
+    @NotBlank(message = "Password cannot be empty")
     private String password;
 
     @OneToOne @Nullable

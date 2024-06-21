@@ -29,7 +29,7 @@ public class LostReport extends Report
         super(title, description, imagePath, isFinished, category);
         this.lastSeenDate = lastSeenDate;
         this.lastSeenLocation = lastSeenLocation;
-        if(lostLocation != null) this.lostLocation = lostLocation;      // TODO: passt das so?
+        this.lostLocation = (lostLocation != null ? lostLocation : lastSeenLocation);
         this.lostRadius = lostRadius;
         this.owner = owner;
     }
