@@ -67,7 +67,7 @@ public class UserService
         return userConverter.convertToDtoResponse(userRepository.save(user));
     }
 
-    private String generateRandomUsername() {
+    public String generateRandomUsername() {
         Faker faker = new Faker(
                 Locale.of("de")
         );

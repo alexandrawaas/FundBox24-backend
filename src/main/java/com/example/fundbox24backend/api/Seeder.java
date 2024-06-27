@@ -2,7 +2,7 @@ package com.example.fundbox24backend.api;
 
 import com.example.fundbox24backend.api.model.*;
 import com.example.fundbox24backend.api.repository.*;
-import org.hibernate.boot.model.relational.Database;
+import com.example.fundbox24backend.api.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
@@ -27,7 +27,8 @@ class Seeder {
             ChatRepository chatRepository,
             LostReportRepository lostReportRepository,
             MessageRepository messageRepository,
-            PasswordEncoder passwordEncoder
+            PasswordEncoder passwordEncoder,
+            UserService userService
     ) {
         if(enableSeeder) {
             return args -> {
@@ -51,13 +52,13 @@ class Seeder {
 
                 // Seed users
                 User testUser1 = new User(
-                        "LachenderLurch",
+                        userService.generateRandomUsername(),
                         "lurchi@quakmail.de",
                         passwordEncoder.encode("lurch123")
                 );
 
                 User testUser2 = new User(
-                        "WhopperBomber",
+                        userService.generateRandomUsername(),
                         "whopwhop@bk.com",
                         passwordEncoder.encode("whopper123")
                 );
