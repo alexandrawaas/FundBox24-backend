@@ -17,4 +17,12 @@ public class LoginTest {
     void contextLoads() {
         assertThat(userController).isNotNull();
     }
+
+    /**
+     * Test if the user can log in with BasicAuth
+     */
+    @Test()
+    void login() {
+        userController.login();
+    }
 }
