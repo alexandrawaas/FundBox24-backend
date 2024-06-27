@@ -41,14 +41,14 @@ class Seeder {
                 categoryRepository.deleteAll();
 
                 // Seed categories
-                log.info("Preloading " + categoryRepository.save(new Category("Geldbörse", ValueType.HIGH)));
-                log.info("Preloading " + categoryRepository.save(new Category("Schlüssel", ValueType.HIGH)));
-                log.info("Preloading " + categoryRepository.save(new Category("Kleidung", ValueType.LOW)));
-                log.info("Preloading " + categoryRepository.save(new Category("Tasche", ValueType.LOW)));
-                log.info("Preloading " + categoryRepository.save(new Category("Gerät", ValueType.HIGH)));
-                log.info("Preloading " + categoryRepository.save(new Category("Schmuck", ValueType.HIGH)));
-                log.info("Preloading " + categoryRepository.save(new Category("Spielzeug", ValueType.LOW)));
-                log.info("Preloading " + categoryRepository.save(new Category("Sonstiges", ValueType.LOW)));
+                log.info("Preloading " + categoryRepository.save(new Category(1002L,"Geldbörse", ValueType.HIGH)));
+                log.info("Preloading " + categoryRepository.save(new Category(1003L,"Schlüssel", ValueType.HIGH)));
+                log.info("Preloading " + categoryRepository.save(new Category(1004L,"Kleidung", ValueType.LOW)));
+                log.info("Preloading " + categoryRepository.save(new Category(1005L,"Tasche", ValueType.LOW)));
+                log.info("Preloading " + categoryRepository.save(new Category(1006L,"Gerät", ValueType.HIGH)));
+                log.info("Preloading " + categoryRepository.save(new Category(1007L,"Schmuck", ValueType.HIGH)));
+                log.info("Preloading " + categoryRepository.save(new Category(1008L,"Spielzeug", ValueType.LOW)));
+                log.info("Preloading " + categoryRepository.save(new Category(1009L,"Sonstiges", ValueType.LOW)));
 
                 // Seed users
                 User testUser1 = new User(

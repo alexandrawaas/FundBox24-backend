@@ -14,7 +14,7 @@ import lombok.Setter;
 public class Category {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    //@GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
     @NotNull @NotBlank(message="category name must not be empty.")
     @Size(min=1, max=30, message="title must have between {min} and {max} characters.")
@@ -31,6 +31,12 @@ public class Category {
     }
 
     public Category(String name, ValueType value) {
+        this.name = name;
+        this.value = value;
+    }
+
+    public Category(Long id, String name, ValueType value) {
+        this.id = id;
         this.name = name;
         this.value = value;
     }
