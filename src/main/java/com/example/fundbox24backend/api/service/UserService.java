@@ -12,11 +12,13 @@ import com.example.fundbox24backend.api.datatransfer.user.UserDtoRequest;
 import com.example.fundbox24backend.api.datatransfer.user.UserDtoResponse;
 import com.example.fundbox24backend.api.model.User;
 import com.example.fundbox24backend.api.repository.UserRepository;
+import com.github.javafaker.Faker;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.Stream;
 
 @Service
@@ -65,6 +67,14 @@ public class UserService
         return userConverter.convertToDtoResponse(userRepository.save(user));
     }
 
+    private String generateRandomUsername() {
+        Faker faker = new Faker(
+                Locale.of("de")
+        );
+
+        return faker.rickAndMorty().character();
+    }
+
     public UserDtoResponse register(AuthDtoRequest authDtoRequest)
     {
         String passwordHash = passwordEncoder.encode(
@@ -72,7 +82,7 @@ public class UserService
         );
 
         User newUser = new User(
-                null,
+                generateRandomUsername(),
                 authDtoRequest.getEmail(),
                 passwordHash
         );
@@ -86,8 +96,6 @@ public class UserService
     {
         return getCurrentUser();
     }
-
-    public void logout() {}
 
     public List<LostReportDtoResponse> getUserLostReports()
     {
