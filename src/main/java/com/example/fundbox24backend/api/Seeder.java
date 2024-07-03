@@ -79,9 +79,9 @@ class Seeder {
                 Location location7 = new Location(49.454686, 11.003682);
 
 
-                LostReport lostReport = lostReportRepository.save(new LostReport(  "Geldbörse mit blauem Blumenprint", "Ein Damengeldbeutel, der mit hellblauen und dunkelblauen Rosen bedruckt ist. Enthält verschiedene Stempelkarten und ca. 60 Euro.", "/images/wallet2.jpg", false, categoryRepository.findAll().getFirst(), LocalDateTime.of(2024, 4, 24, 7, 0), location3, location4, 4, anna));
-                LostReport lostReport2 = lostReportRepository.save(new LostReport(  "Kuscheltier-Ente", "Mein Sohn hat seine süße Kuschel-Ente verloren. Sie ist gelb und trägt ein weiß-blau-gestreiftes Halstuch. Wer sie findet, bitte melden!", "/images/toy.jpg", false, categoryRepository.findAll().get(6), LocalDateTime.of(2024, 3, 29, 10, 3), location5, null, 6, anna));
-                LostReport lostReport3 = lostReportRepository.save(new LostReport(  "Ohrring mit Herz-Anhänger", "Mir ist ein Ohrring mit einem silbernen Herz-Anhänger verloren gegangen. Er ist mit einem roten Glitzerstein verziert. Vielen Dank im Voraus für eure Infos!", "/images/earring.jpg", false, categoryRepository.findAll().get(5), LocalDateTime.of(2024, 6, 2, 19, 37), location6, location7, 4, anna));
+                LostReport lostReport = lostReportRepository.save(new LostReport(  "Geldbörse mit blauem Blumenprint", "Ein Damengeldbeutel, der mit hellblauen und dunkelblauen Rosen bedruckt ist. Enthält verschiedene Stempelkarten und ca. 60 Euro.", "/images/wallet2.jpg", false, categoryRepository.findAll().getFirst(), LocalDateTime.of(2024, 4, 24, 7, 0), location3, location4, 400, anna));
+                LostReport lostReport2 = lostReportRepository.save(new LostReport(  "Kuscheltier-Ente", "Mein Sohn hat seine süße Kuschel-Ente verloren. Sie ist gelb und trägt ein weiß-blau-gestreiftes Halstuch. Wer sie findet, bitte melden!", "/images/toy.jpg", false, categoryRepository.findAll().get(6), LocalDateTime.of(2024, 3, 29, 10, 3), location5, null, 600, anna));
+                LostReport lostReport3 = lostReportRepository.save(new LostReport(  "Ohrring mit Herz-Anhänger", "Mir ist ein Ohrring mit einem silbernen Herz-Anhänger verloren gegangen. Er ist mit einem roten Glitzerstein verziert. Vielen Dank im Voraus für eure Infos!", "/images/earring.jpg", false, categoryRepository.findAll().get(5), LocalDateTime.of(2024, 6, 2, 19, 37), location6, location7, 2300, anna));
 
 
                 Chat chat = new Chat();
