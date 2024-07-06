@@ -6,6 +6,7 @@ import com.example.fundbox24backend.api.service.FoundReportService;
 import com.example.fundbox24backend.api.service.exceptions.ReportNotFoundException;
 import com.example.fundbox24backend.api.model.FoundReport;
 import com.example.fundbox24backend.api.repository.FoundReportRepository;
+import jakarta.annotation.Nullable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
@@ -23,8 +24,8 @@ class FoundReportController {
 
 
     @GetMapping("/report/found")
-    List<FoundReportDtoResponse> getAllFoundReports() {
-        return foundReportService.getAllFoundReports();
+    List<FoundReportDtoResponse> getAllFoundReports(@RequestParam @Nullable String q, @RequestParam @Nullable String category, @RequestParam @Nullable String sort) {
+        return foundReportService.getAllFoundReports(q, category, sort);
     }
 
     @PostMapping("/report/found")
