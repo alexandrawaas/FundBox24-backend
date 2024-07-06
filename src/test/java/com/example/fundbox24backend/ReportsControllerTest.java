@@ -105,7 +105,7 @@ class ReportsControllerTest {
     @Test
     void testGetAllLostReport() throws Exception {
         setup();
-        when(service.getAllLostReports()).thenReturn(allLostReportsDtoResponse);
+        when(service.getAllLostReports("", "", "")).thenReturn(allLostReportsDtoResponse);
         this.mockMvc.perform(MockMvcRequestBuilders.get("/report/lost")).andDo(print()).andExpect(status().isOk())
                 .andExpect(content().contentType("application/json")).andExpect(content().string(containsString("Red Bag")));
     }
