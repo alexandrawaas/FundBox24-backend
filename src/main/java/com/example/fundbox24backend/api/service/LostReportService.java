@@ -42,7 +42,7 @@ public class LostReportService
             filteredResults.addAll(results);
         }
         if(filterCategory != null && !filterCategory.isEmpty()) {
-            finalResults.addAll(filteredResults.stream().filter(report -> report.getCategory().getName().equals(filterCategory)).toList());
+            finalResults.addAll(filteredResults.stream().filter(report -> report.getCategory().getId().toString().equals(filterCategory)).toList());
         }
         else {
             finalResults.addAll(filteredResults);

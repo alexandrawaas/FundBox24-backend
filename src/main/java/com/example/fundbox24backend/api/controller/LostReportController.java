@@ -22,8 +22,8 @@ class LostReportController {
 
 
     @GetMapping("/report/lost")
-    List<LostReportDtoResponse> getAllLostReports(@RequestParam(required = false) String q, @RequestParam(required = false) String filterCategory, @RequestParam(required = false) String sort) {
-        return lostReportService.getAllLostReports(q, filterCategory, sort);
+    List<LostReportDtoResponse> getAllLostReports(@RequestParam(required = false) String q, @RequestParam(required = false) String category, @RequestParam(required = false) String sort) {
+        return lostReportService.getAllLostReports(q, category, sort);
     }
 
     @PostMapping("/report/lost")
