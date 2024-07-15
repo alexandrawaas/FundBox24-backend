@@ -30,7 +30,7 @@ public class User {
     @OneToOne @Nullable
     private Location homeLocation = null;
 
-    private double homeRadius = 1.0;
+    private double homeRadius = 1000;
 
     private boolean useCurrentLocation = true;
 
