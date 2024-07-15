@@ -155,12 +155,28 @@ paths:
         - Report
       summary: Get a list of all found reports
       parameters:
+        - name: q
+          in: query
+          required: false
+          description: Search query
+          schema:
+            type: string
+            example: 'scarf'
         - name: category
           in: query
           required: false
-          description: Category of the report
+          description: Category filter
           schema:
             $ref: '#/components/schemas/Category'
+        - name: sort
+          in: query
+          required: false
+          description: Sort the reports by specific criteria
+          schema:
+            type: string
+            enum:
+              - alphabetical
+              - found-date
         - name: latitude
           in: query
           required: false
@@ -295,12 +311,28 @@ paths:
         - Report
       summary: Get a list of all lost reports
       parameters:
+        - name: q
+          in: query
+          required: false
+          description: Search query
+          schema:
+              type: string
+              example: 'scarf'
         - name: category
           in: query
           required: false
-          description: Category of the report
+          description: Category filter
           schema:
             $ref: '#/components/schemas/Category'
+        - name: sort
+          in: query
+          required: false
+          description: Sort the reports by specific criteria
+          schema:
+              type: string
+              enum:
+                - alphabetical
+                - last-seen
         - name: latitude
           in: query
           required: false
@@ -744,9 +776,9 @@ components:
           minLength: 1
           maxLength: 30
         reportVisitor:
-          $ref: '#/components/schemas/ChatPartnerDto'
+          $ref: '#/components/schemas/ChatPartnerDtoResponse'
         reportCreator:
-          $ref: '#/components/schemas/ChatPartnerDto'
+          $ref: '#/components/schemas/ChatPartnerDtoResponse'
 
     MessageDtoRequest:
       type: object
@@ -760,7 +792,7 @@ components:
           type: string
           format: date-time
         sender:
-          $ref: '#/components/schemas/ChatPartnerDto'
+          $ref: '#/components/schemas/ChatPartnerDtoResponse'
 
     MessageDtoResponse:
       type: object
@@ -778,9 +810,9 @@ components:
           type: string
           format: date-time
         sender:
-          $ref: '#/components/schemas/ChatPartnerDto'
+          $ref: '#/components/schemas/ChatPartnerDtoResponse'
 
-    ChatPartnerDto:
+    ChatPartnerDtoResponse:
         type: object
         properties:
           id:
