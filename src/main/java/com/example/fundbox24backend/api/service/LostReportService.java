@@ -59,9 +59,9 @@ public class LostReportService
     }
 
     public LostReportDtoResponse createLostReport(LostReportDtoRequest lostReportDtoRequest) {
-        return lostReportConverter.convertToDtoResponse(
-                repository.save(lostReportConverter.convertToEntity(lostReportDtoRequest, userService.getCurrentUserEntity()))
-        );
+        LostReport report = repository.save(lostReportConverter.convertToEntity(lostReportDtoRequest, userService.getCurrentUserEntity()));
+        userService.addLostReport(report);
+        return lostReportConverter.convertToDtoResponse(report);
     }
 
     public LostReportDtoResponse getLostReport(Long id) {

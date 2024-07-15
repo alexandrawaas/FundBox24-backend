@@ -58,9 +58,9 @@ public class FoundReportService
     }
 
     public FoundReportDtoResponse createFoundReport(FoundReportDtoRequest foundReportDtoRequest) {
-        return foundReportConverter.convertToDtoResponse(
-                repository.save(foundReportConverter.convertToEntity(foundReportDtoRequest, userService.getCurrentUserEntity()))
-        );
+        FoundReport report = repository.save(foundReportConverter.convertToEntity(foundReportDtoRequest, userService.getCurrentUserEntity()));
+        userService.addFoundReport(report);
+        return foundReportConverter.convertToDtoResponse(report);
     }
 
     public FoundReportDtoResponse getFoundReport(Long id) {

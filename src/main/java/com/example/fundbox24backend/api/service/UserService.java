@@ -10,6 +10,8 @@ import com.example.fundbox24backend.api.datatransfer.user.AuthDtoRequest;
 import com.example.fundbox24backend.api.datatransfer.user.UserConverter;
 import com.example.fundbox24backend.api.datatransfer.user.UserDtoRequest;
 import com.example.fundbox24backend.api.datatransfer.user.UserDtoResponse;
+import com.example.fundbox24backend.api.model.FoundReport;
+import com.example.fundbox24backend.api.model.LostReport;
 import com.example.fundbox24backend.api.model.User;
 import com.example.fundbox24backend.api.repository.UserRepository;
 import com.github.javafaker.Faker;
@@ -112,5 +114,17 @@ public class UserService
         List<ChatDtoResponse> chats1 = getCurrentUserEntity().getInitiatedChats().stream().map(chatConverter::convertToDtoResponse).toList();
         List<ChatDtoResponse> chats2 = getCurrentUserEntity().getOwnChats().stream().map(chatConverter::convertToDtoResponse).toList();
         return Stream.of(chats1, chats2).flatMap(List::stream).toList();
+    }
+
+    public void addFoundReport(FoundReport report) {
+        User user = getCurrentUserEntity();
+        user.getFoundReports().add(report);
+        userRepository.save(user);
+    }
+
+    public void addLostReport(LostReport report) {
+        User user = getCurrentUserEntity();
+        user.getLostReports().add(report);
+        userRepository.save(user);
     }
 }
