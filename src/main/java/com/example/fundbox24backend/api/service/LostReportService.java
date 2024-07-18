@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class LostReportService
@@ -73,8 +74,7 @@ public class LostReportService
     }
 
     public LostReportDtoResponse replaceLostReport(LostReportDtoRequest newLostReport, Long id) {
-
-        return lostReportConverter.convertToDtoResponse(
+        LostReportDtoResponse lostReportDtoResponse = lostReportConverter.convertToDtoResponse(
                 repository.findById(id)
                         .map(report -> {
                             report.setTitle(newLostReport.getTitle());
@@ -94,6 +94,10 @@ public class LostReportService
                         })
                         .orElseThrow(ReportNotFoundException::new)
         );
+        LostReport lostReport = lostReportConverter.convertToEntity(newLostReport, userService.getCurrentUserEntity());
+        repository.save(lostReport);
+
+        return lostReportDtoResponse;
     }
 
     public void deleteLostReport(Long id) {
