@@ -74,7 +74,7 @@ public class LostReportService
     }
 
     public LostReportDtoResponse replaceLostReport(LostReportDtoRequest newLostReport, Long id) {
-        LostReportDtoResponse lostReportDtoResponse = lostReportConverter.convertToDtoResponse(
+        return lostReportConverter.convertToDtoResponse(
                 repository.findById(id)
                         .map(report -> {
                             report.setTitle(newLostReport.getTitle());
@@ -94,10 +94,6 @@ public class LostReportService
                         })
                         .orElseThrow(ReportNotFoundException::new)
         );
-        LostReport lostReport = lostReportConverter.convertToEntity(newLostReport, userService.getCurrentUserEntity());
-        repository.save(lostReport);
-
-        return lostReportDtoResponse;
     }
 
     public void deleteLostReport(Long id) {
