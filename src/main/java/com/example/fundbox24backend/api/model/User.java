@@ -18,7 +18,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    private String name;    // TODO: Random generation of username
+    private String name;
     @NotNull
     @NotBlank(message = "Email cannot be empty")
     @Email(message = "Email is not valid", regexp="^[a-zA-Z0-9_!#$%&’*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$")
@@ -55,7 +55,7 @@ public class User {
 
     public User(String name, String email, String password)
     {
-        this.name = (name != null) ? name : "RANDOM NAME";  // TODO: Random generation of username
+        this.name = (name != null) ? name : "RANDOM NAME";
         this.email = email;
         this.password = password;
 

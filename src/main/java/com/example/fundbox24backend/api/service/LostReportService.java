@@ -31,7 +31,6 @@ public class LostReportService
 
 
     public List<LostReportDtoResponse> getAllLostReports(String q, String filterCategory, String sort) {
-        // TODO: Filter implementieren
         // TODO: Filter für location implementieren
         List<LostReport> results = repository.findAll();
         ArrayList<LostReport> filteredResults = new ArrayList<>();
