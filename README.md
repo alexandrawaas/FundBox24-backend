@@ -1,9 +1,5 @@
 # FundBox24 Backend
 
-
-
-## Anleitung zum Starten
-
 Das Backend wurde mit Spring Boot entwickelt und nutzt eine MySQL-Datenbank, um Informationen wie Benutzerdaten und Daten zu Fundsachen und -orten zu speichern.
 
 Beide Dienste befinden sich jeweils in einem isolierten Docker-Container.
