@@ -21,4 +21,4 @@ docker compose up
 Es kann etwas dauern, bis das Backend gestartet ist, weil das Docker Image für MySQL und alle 
 Gradle-Abhängigkeiten für das Backend heruntergeladen werden müssen.
 
-Wechseln Sie anschließend zu unserer App und melden Sie sich an. 😉
+Wechseln Sie anschließend zu unserer App und melden Sie sich an.
