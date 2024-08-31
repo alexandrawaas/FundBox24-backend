@@ -2,7 +2,7 @@
 
 Fundbox24 ist als Projekt einer Studienarbeit aus dem Marketing entstanden und wurde im Rahmen des Studienmoduls "Agile Test- und Entwicklungsmethoden" als Gruppenarbeit teilumgesetzt. Ziel war die Entwicklung einer deutschlandweit einheitlichen Fundbüro-App, in der Nutzer gefundene Gegenstände einstellen oder Verlustanzeigen aufgeben können. 
 
-Das Backend wurde mit Spring Boot entwickelt und nutzt eine MySQL-Datenbank, um Informationen wie Benutzerdaten und Daten zu Fundsachen und -orten zu speichern.
+Das Backend wurde mit Spring Boot in Java entwickelt und nutzt eine MySQL-Datenbank, um Informationen wie Benutzerdaten und Daten zu Fundsachen und -orten zu speichern.
 
 ## Starten des Backend
 
